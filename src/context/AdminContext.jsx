@@ -29,15 +29,16 @@ const AdminProvider = ({ children }) => {
   ========================================================= */
 
   const login = async (email, password) => {
-    const res = await api.post("/admin/login", { email, password });
+  const res = await api.post("/admin/login", { email, password });
 
-    const token = res.data.data.token;
+  const token = res.data.data.token;
 
-    localStorage.setItem("adminToken", token);
-    api.defaults.headers.common.Authorization = `Bearer ${token}`;
+  localStorage.setItem("adminToken", token);
+  api.defaults.headers.common.Authorization = `Bearer ${token}`;
 
-    await initLoad();
-  };
+  await loadAdmin(); // 🔥 directly load admin first
+};
+
 
   const logout = () => {
     localStorage.removeItem("adminToken");
