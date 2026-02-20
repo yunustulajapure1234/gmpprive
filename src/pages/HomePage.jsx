@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
 
 import Hero from "../components/Hero";
@@ -9,17 +9,45 @@ import Contact from "../components/Contact";
 import ComboPackages from "../components/ComboPackages";
 import PolicyFAQ from "../components/PolicyFAQ";
 import ScrollOfferPopup from "../components/ScrollOfferPopup";
+
 const HomePage = ({ onBookNowClick }) => {
   const { language } = useLanguage();
+  const location = useLocation();
+
+  /* ================= ROUTE SCROLL FIX ================= */
+  useEffect(() => {
+    if (location.state?.scrollTo) {
+      const element = document.getElementById(location.state.scrollTo);
+
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: "smooth" });
+        }, 200);
+      }
+    }
+  }, [location]);
 
   return (
     <>
-    <ScrollOfferPopup />
+      {/* TOP ANCHOR */}
+      <div id="top"></div>
+
+      <ScrollOfferPopup />
+
       <Hero onBookNowClick={onBookNowClick} />
-      <About />
-    <ComboPackages/>
-      {/* CATEGORY SELECTION */}
-      <div className="py-10 md:py-8 "id="services">
+
+      {/* ABOUT SECTION */}
+      <div id="about">
+        <About />
+      </div>
+
+      {/* PACKAGES SECTION */}
+      <div id="packages">
+        <ComboPackages />
+      </div>
+
+      {/* CATEGORY SELECTION (SERVICES) */}
+      <div className="py-10 md:py-8" id="services">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           {/* Heading */}
@@ -27,7 +55,9 @@ const HomePage = ({ onBookNowClick }) => {
             <h2 className="text-3xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-amber-600 to-yellow-600 bg-clip-text text-transparent">
               {language === "ar" ? "اختر فئتك" : "Choose Your Category"}
             </h2>
-                <div className="w-24 h-1 bg-gradient-to-r from-transparent via-amber-500 to-transparent mx-auto"></div>
+
+            <div className="w-24 h-1 bg-gradient-to-r from-transparent via-amber-500 to-transparent mx-auto"></div>
+
             <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto">
               {language === "ar"
                 ? "خدمات متخصصة للرجال والنساء"
@@ -65,8 +95,7 @@ const HomePage = ({ onBookNowClick }) => {
                 </p>
 
                 <span className="inline-flex items-center gap-2 px-6 py-3 bg-white text-pink-600 rounded-full font-semibold w-fit group-hover:scale-110 transition">
-                  {language === "ar" ? "عرض الخدمات" : "View Services"}
-                  →
+                  {language === "ar" ? "عرض الخدمات" : "View Services"} →
                 </span>
               </div>
             </Link>
@@ -99,8 +128,7 @@ const HomePage = ({ onBookNowClick }) => {
                 </p>
 
                 <span className="inline-flex items-center gap-2 px-6 py-3 bg-white text-black rounded-full font-semibold w-fit group-hover:scale-110 transition">
-                  {language === "ar" ? "عرض الخدمات" : "View Services"}
-                  →
+                  {language === "ar" ? "عرض الخدمات" : "View Services"} →
                 </span>
               </div>
             </Link>
@@ -110,7 +138,12 @@ const HomePage = ({ onBookNowClick }) => {
       </div>
 
       <Testimonials />
-      <Contact />
+
+      {/* CONTACT SECTION */}
+      <div id="contact">
+        <Contact />
+      </div>
+
       <PolicyFAQ />
     </>
   );

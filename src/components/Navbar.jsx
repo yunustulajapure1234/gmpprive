@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { NavLink } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import { useLanguage } from "../context/LanguageContext";
 import { useBooking } from "../context/BookingContext";
+import { useNavigate, useLocation } from "react-router-dom";
 import logo from "../assets/GMP-Prive-Beauty-and-fitness (2) (1).png";
 
 const Navbar = ({ onCartClick }) => {
@@ -10,12 +10,10 @@ const Navbar = ({ onCartClick }) => {
   const [showBanner, setShowBanner] = useState(true);
 
   const { language, toggleLanguage, t } = useLanguage();
-  const { cart } = useBooking();
+  const { getCartCount } = useBooking();
 
-  /* ================= CART COUNT ================= */
-  const cartCount = useMemo(() => {
-    return cart.reduce((sum, item) => sum + item.quantity, 0);
-  }, [cart]);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   /* ================= SCROLL EFFECT ================= */
   useEffect(() => {
@@ -24,40 +22,48 @@ const Navbar = ({ onCartClick }) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const baseLink =
-    "font-semibold transition-colors duration-300";
+  /* ================= UNIVERSAL NAVIGATION ================= */
+  const goToSection = (sectionId) => {
+    setMobileOpen(false);
 
-  const activeLink = "text-amber-400";
-  const normalLink = "text-white hover:text-amber-400";
+    if (location.pathname !== "/") {
+      navigate("/", { state: { scrollTo: sectionId } });
+    } else {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  };
+
+  const textColor = "text-white";
+  const hoverColor = "hover:text-amber-400";
 
   return (
     <>
-      {/* ================= TOP BANNER ================= */}
+      {/* ================= MARQUEE BANNER ================= */}
       {showBanner && (
         <div className="fixed top-0 left-0 right-0 z-[30] bg-gradient-to-br from-amber-400 to-yellow-700 text-white overflow-hidden shadow-lg">
           <div className="relative flex items-center h-10">
+
+            {/* Close Button */}
             <button
               onClick={() => setShowBanner(false)}
-              className="absolute left-3 w-6 h-6 flex items-center justify-center bg-black/20 hover:bg-black/40 rounded-full"
+              className="absolute left-2 sm:left-4 z-10 w-6 h-6 flex items-center justify-center bg-black/20 hover:bg-black/40 rounded-full transition-all"
             >
               ✕
             </button>
 
+            {/* Marquee */}
             <div className="marquee-container w-full">
-              <div className="marquee-content">
+              <div className={`marquee-content ${language === "ar" ? "reverse" : ""}`}>
                 {t?.banner?.items?.map((item, index) => (
-                  <span
-                    key={index}
-                    className="inline-flex items-center px-8 text-sm font-semibold whitespace-nowrap"
-                  >
+                  <span key={index} className="px-8 text-sm font-semibold whitespace-nowrap">
                     {item}
                   </span>
                 ))}
                 {t?.banner?.items?.map((item, index) => (
-                  <span
-                    key={`dup-${index}`}
-                    className="inline-flex items-center px-8 text-sm font-semibold whitespace-nowrap"
-                  >
+                  <span key={"dup-" + index} className="px-8 text-sm font-semibold whitespace-nowrap">
                     {item}
                   </span>
                 ))}
@@ -67,81 +73,65 @@ const Navbar = ({ onCartClick }) => {
         </div>
       )}
 
-      {/* ================= NAVBAR ================= */}
+      {/* ================= MAIN NAVBAR ================= */}
       <nav
         className={`fixed left-0 right-0 z-50 transition-all duration-300 ${
           showBanner ? "top-10" : "top-0"
         } ${
           scrolled
             ? "bg-black/95 backdrop-blur-md shadow-2xl"
-            : "bg-transparent"
+            : "bg-transparent backdrop-blur-sm"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between h-16">
 
-            {/* ================= LOGO ================= */}
-            <NavLink to="/" className="flex items-center space-x-3">
-              <img
-                src={logo}
-                alt="GMP Privé"
-                className="h-14 w-auto object-contain"
-              />
-            </NavLink>
+            {/* LOGO */}
+            <button onClick={() => navigate("/")} className="flex items-center space-x-3">
+              <img src={logo} alt="GMP Privé" className="h-14 w-auto object-contain" />
+            </button>
 
             {/* ================= DESKTOP MENU ================= */}
             <div className="hidden md:flex items-center space-x-8">
 
-              <NavLink
-                to="/"
-                className={({ isActive }) =>
-                  `${baseLink} ${
-                    isActive ? activeLink : normalLink
-                  }`
-                }
-              >
+              <button onClick={() => navigate("/")} className={`${textColor} ${hoverColor} font-semibold`}>
                 {t.nav.home}
-              </NavLink>
+              </button>
 
-              <NavLink
-                to="/women"
-                className={({ isActive }) =>
-                  `${baseLink} ${
-                    isActive ? activeLink : normalLink
-                  }`
-                }
-              >
-                Women
-              </NavLink>
+              <button onClick={() => goToSection("about")} className={`${textColor} ${hoverColor} font-semibold`}>
+                {t.nav.about}
+              </button>
 
-              <NavLink
-                to="/men"
-                className={({ isActive }) =>
-                  `${baseLink} ${
-                    isActive ? activeLink : normalLink
-                  }`
-                }
-              >
-                Men
-              </NavLink>
+              <button onClick={() => goToSection("packages")} className={`${textColor} ${hoverColor} font-semibold`}>
+                {t.nav.packages || "Packages"}
+              </button>
+
+              <button onClick={() => goToSection("services")} className={`${textColor} ${hoverColor} font-semibold`}>
+                {t.nav.services || "Services"}
+              </button>
+
+              <button onClick={() => goToSection("contact")} className={`${textColor} ${hoverColor} font-semibold`}>
+                {t.nav.contact}
+              </button>
 
               {/* LANGUAGE */}
               <button
                 onClick={toggleLanguage}
-                className="px-4 py-2 rounded-full bg-white text-gray-800 font-semibold hover:scale-105 transition"
+                className="px-4 py-2 rounded-full bg-white/90 hover:bg-white text-gray-800 font-semibold transition-all hover:scale-105"
               >
                 {language === "en" ? "العربية" : "English"}
               </button>
 
               {/* CART */}
               <button
+                type="button"
                 onClick={onCartClick}
-                className="relative px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-full shadow-md hover:scale-105 transition"
+                className="relative px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-full hover:scale-105 transition-all shadow-md"
               >
                 🛒
-                {cartCount > 0 && (
+                {getCartCount() > 0 && (
                   <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-xs font-bold rounded-full flex items-center justify-center animate-pulse">
-                    {cartCount}
+                    {getCartCount()}
                   </span>
                 )}
               </button>
@@ -158,13 +148,14 @@ const Navbar = ({ onCartClick }) => {
               </button>
 
               <button
+                type="button"
                 onClick={onCartClick}
-                className="relative px-3 py-2 bg-amber-500 text-white rounded-lg"
+                className="relative px-3 py-2 bg-amber-500 text-white rounded-lg shadow-md"
               >
                 🛒
-                {cartCount > 0 && (
+                {getCartCount() > 0 && (
                   <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-xs font-bold rounded-full flex items-center justify-center">
-                    {cartCount}
+                    {getCartCount()}
                   </span>
                 )}
               </button>
@@ -181,29 +172,27 @@ const Navbar = ({ onCartClick }) => {
           {/* ================= MOBILE MENU ================= */}
           {mobileOpen && (
             <div className="md:hidden pb-4 space-y-3 bg-black/90 backdrop-blur-md rounded-b-xl -mx-4 px-6">
-              <NavLink
-                to="/"
-                onClick={() => setMobileOpen(false)}
-                className="block py-2 text-white font-semibold"
-              >
+
+              <button onClick={() => navigate("/")} className="block py-2 text-white font-semibold">
                 {t.nav.home}
-              </NavLink>
+              </button>
 
-              <NavLink
-                to="/women"
-                onClick={() => setMobileOpen(false)}
-                className="block py-2 text-white font-semibold"
-              >
-                Women
-              </NavLink>
+              <button onClick={() => goToSection("about")} className="block py-2 text-white font-semibold">
+                {t.nav.about}
+              </button>
 
-              <NavLink
-                to="/men"
-                onClick={() => setMobileOpen(false)}
-                className="block py-2 text-white font-semibold"
-              >
-                Men
-              </NavLink>
+              <button onClick={() => goToSection("packages")} className="block py-2 text-white font-semibold">
+                {t.nav.packages || "Packages"}
+              </button>
+
+              <button onClick={() => goToSection("services")} className="block py-2 text-white font-semibold">
+                {t.nav.services || "Services"}
+              </button>
+
+              <button onClick={() => goToSection("contact")} className="block py-2 text-white font-semibold">
+                {t.nav.contact}
+              </button>
+
             </div>
           )}
         </div>
@@ -213,17 +202,25 @@ const Navbar = ({ onCartClick }) => {
       <style>{`
         .marquee-container {
           overflow: hidden;
+          position: relative;
         }
+
         .marquee-content {
           display: flex;
-          animation: marquee 30s linear infinite;
+          animation: marquee 15s linear infinite;
         }
+
         .marquee-content:hover {
           animation-play-state: paused;
         }
+
         @keyframes marquee {
           0% { transform: translateX(0); }
           100% { transform: translateX(-50%); }
+        }
+
+        nav {
+          transition: top 0.3s ease-in-out;
         }
       `}</style>
     </>
