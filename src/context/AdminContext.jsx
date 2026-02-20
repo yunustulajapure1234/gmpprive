@@ -237,32 +237,38 @@ const AdminProvider = ({ children }) => {
     }
   };
 
- useEffect(() => {
+useEffect(() => {
   const token = localStorage.getItem("adminToken");
 
-  const loadPublicData = async () => {
+  const loadData = async () => {
     try {
       setLoading(true);
 
       if (token) {
         api.defaults.headers.common.Authorization = `Bearer ${token}`;
-        await initLoad(); // full admin load
+
+        await Promise.all([
+          loadAdmin(),
+          loadServices(),
+          loadPackages(),
+          loadBookings(),
+          fetchStats(),
+        ]);
       } else {
-        // 🔥 LOAD PUBLIC SERVICES ONLY
         await loadServices();
         await loadPackages();
-        setLoading(false);
       }
     } catch (err) {
       console.error("Init load error:", err);
-      logout();
+      setAdmin(null); // ❌ DO NOT logout()
     } finally {
       setLoading(false);
     }
   };
 
-  loadPublicData();
+  loadData();
 }, []);
+
 
 
   return (
