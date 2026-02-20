@@ -92,16 +92,19 @@ export const BookingProvider = ({ children }) => {
   }, []);
 
   /* ================= MEMOIZED CALCULATIONS ================= */
-  const getTotalAmount = useMemo(() => {
+  const getTotalAmount = useCallback(() => {
     return cart.reduce(
       (sum, item) => sum + item.price * item.quantity,
       0
     );
   }, [cart]);
 
-  const getCartCount = useMemo(() => {
-    return cart.reduce((sum, item) => sum + item.quantity, 0);
-  }, [cart]);
+
+
+ const getCartCount = useCallback(() => {
+  return cart.reduce((sum, item) => sum + item.quantity, 0);
+}, [cart]);
+
 
   /* ================= BOOKING DETAILS ================= */
   const updateBookingDetails = (details) => {
