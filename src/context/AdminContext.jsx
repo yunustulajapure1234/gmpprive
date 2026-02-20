@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import api from "../api/api";
 import { toastSuccess, toastError } from "../utils/alert";
-
+import Swal from "sweetalert2";
 const AdminContext = createContext(null);
 
 export const useAdmin = () => {
@@ -28,16 +28,67 @@ const AdminProvider = ({ children }) => {
      🔐 AUTH
   ========================================================= */
 
-  const login = async (email, password) => {
-  const res = await api.post("/admin/login", { email, password });
 
-  const token = res.data.data.token;
 
-  localStorage.setItem("adminToken", token);
-  api.defaults.headers.common.Authorization = `Bearer ${token}`;
+const login = async (email, password) => {
+  try {
+    const res = await api.post("/admin/login", { email, password });
 
-  await loadAdmin(); // 🔥 directly load admin first
+    const token = res.data.data.token;
+    const adminData = res.data.data.admin;
+
+    // Save token
+    localStorage.setItem("adminToken", token);
+    api.defaults.headers.common.Authorization = `Bearer ${token}`;
+
+    await loadAdmin();
+
+    // ✅ Success Alert
+    await Swal.fire({
+      icon: "success",
+      title: `Welcome ${adminData.name}`,
+      text: "Login Successful 🎉",
+      timer: 2000,
+      showConfirmButton: false,
+    });
+
+  } catch (err) {
+    console.error("Login error:", err);
+
+    let message = "Something went wrong. Please try again.";
+
+    // 🔥 1️⃣ Server response error
+    if (err.response) {
+      if (err.response.status === 401) {
+        message = "Invalid Email or Password";
+      } else if (err.response.status === 500) {
+        message = "Server error. Please try later.";
+      } else {
+        message = err.response.data?.message || message;
+      }
+    }
+
+    // 🔥 2️⃣ Network error
+    else if (err.request) {
+      message = "Network error. Check your internet connection.";
+    }
+
+    // ❌ Remove token if failed
+    localStorage.removeItem("adminToken");
+    delete api.defaults.headers.common.Authorization;
+
+    // ❌ Error Alert
+    await Swal.fire({
+      icon: "error",
+      title: "Login Failed",
+      text: message,
+      confirmButtonColor: "#d33",
+    });
+
+    throw err;
+  }
 };
+
 
 
   const logout = () => {
