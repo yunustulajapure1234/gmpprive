@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useMemo, useCallback } from "react";
 import { useBooking } from "../context/BookingContext";
 import { useLanguage } from "../context/LanguageContext";
 import BookingModal from "./BookingModal";
@@ -12,27 +12,16 @@ const Cart = ({ onClose }) => {
   } = useBooking();
 
   const { language } = useLanguage();
-  const [showBookingModal, setShowBookingModal] = useState(false);
+  const [showBookingModal, setShowBookingModal] = React.useState(false);
 
-  /* ================= SAFE TOTAL ================= */
+  /* ================= TOTAL ================= */
   const totalAmount = useMemo(() => {
     return cart.reduce((acc, item) => {
       return acc + item.price * item.quantity;
     }, 0);
   }, [cart]);
 
-  /* ================= SAFE DATE FORMAT ================= */
-  const formatDate = (dateString) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-GB", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    });
-  };
-
-  /* ================= SAFE QUANTITY ================= */
+  /* ================= HANDLERS ================= */
   const handleIncrease = useCallback(
     (id, qty) => {
       updateQuantity(id, qty + 1);
@@ -58,14 +47,10 @@ const Cart = ({ onClose }) => {
     [removeFromCart]
   );
 
-  const handleCheckoutClick = () => {
-    setShowBookingModal(true);
-  };
-
   return (
     <>
-      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex justify-end animate-fadeIn">
-        <div className="bg-white w-full max-w-md h-full flex flex-col shadow-2xl animate-slideInRight">
+      <div className="fixed inset-0 bg-black/60 z-50 flex justify-end">
+        <div className="bg-white w-full max-w-md h-full flex flex-col shadow-2xl">
 
           {/* HEADER */}
           <div className="bg-gradient-to-r from-amber-500 to-yellow-600 text-white p-6">
@@ -73,53 +58,19 @@ const Cart = ({ onClose }) => {
               <h2 className="text-xl font-bold">
                 {language === "ar" ? "سلة التسوق" : "Your Cart"}
               </h2>
-              <button
-                onClick={onClose}
-                className="text-white text-xl font-bold hover:scale-110 transition"
-              >
-                ✕
-              </button>
+              <button onClick={onClose} className="text-xl">✕</button>
             </div>
-
-            <p className="mt-3 text-sm font-semibold">
-              {cart.length} {language === "ar" ? "عناصر" : "Items"}
-            </p>
+            <p className="mt-2 text-sm">{cart.length} Items</p>
           </div>
-
-          {/* BOOKING SUMMARY */}
-          {bookingDetails?.isBookingInfoSet && (
-            <div className="bg-amber-50 p-4 text-sm border-b">
-              <div className="flex justify-between mb-2">
-                <span className="font-semibold">Booking Info</span>
-                <button
-                  onClick={() => setShowBookingModal(true)}
-                  className="text-amber-600 text-xs font-bold hover:underline"
-                >
-                  Edit
-                </button>
-              </div>
-
-              <p><b>Name:</b> {bookingDetails.customerName}</p>
-              <p><b>Phone:</b> {bookingDetails.phone}</p>
-              <p><b>Date:</b> {formatDate(bookingDetails.date)}</p>
-              <p><b>Time:</b> {bookingDetails.time}</p>
-              <p><b>Address:</b> {bookingDetails.address}</p>
-            </div>
-          )}
 
           {/* CART ITEMS */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
-
             {cart.length === 0 ? (
               <div className="text-center text-gray-400 mt-20">
                 Cart is empty
               </div>
             ) : (
-              cart.map((item, index) => {
-
-                // ✅ FIXED UNIQUE KEY
-                const uniqueKey = `${item._id}-${index}`;
-
+              cart.map((item) => {
                 const displayName =
                   language === "ar"
                     ? item.nameAr || item.name
@@ -127,35 +78,26 @@ const Cart = ({ onClose }) => {
 
                 return (
                   <div
-                    key={uniqueKey}
-                    className="border rounded-xl p-4 shadow-sm hover:shadow-md transition"
+                    key={item.id}
+                    className="border rounded-xl p-4 shadow-sm"
                   >
                     <div className="flex justify-between">
-                      <div>
-                        <h4 className="font-bold text-gray-800">
-                          {displayName}
-                        </h4>
-                        {item.duration && (
-                          <p className="text-xs text-gray-500">
-                            ⏱ {item.duration}
-                          </p>
-                        )}
-                      </div>
-
+                      <h4 className="font-bold">{displayName}</h4>
                       <button
-                        onClick={() => handleRemove(item._id)}
-                        className="text-red-500 text-sm font-semibold hover:text-red-700 transition"
+                        onClick={() => handleRemove(item.id)}
+                        className="text-red-500"
                       >
                         Remove
                       </button>
                     </div>
 
-                    {/* QUANTITY CONTROL */}
                     <div className="flex justify-between items-center mt-4">
-                      <div className="flex items-center border rounded-lg overflow-hidden">
+                      <div className="flex items-center border rounded-lg">
                         <button
-                          onClick={() => handleDecrease(item._id, item.quantity)}
-                          className="px-3 py-1 bg-gray-100 hover:bg-gray-200 transition"
+                          onClick={() =>
+                            handleDecrease(item.id, item.quantity)
+                          }
+                          className="px-3 py-1"
                         >
                           -
                         </button>
@@ -165,8 +107,10 @@ const Cart = ({ onClose }) => {
                         </span>
 
                         <button
-                          onClick={() => handleIncrease(item._id, item.quantity)}
-                          className="px-3 py-1 bg-gray-100 hover:bg-gray-200 transition"
+                          onClick={() =>
+                            handleIncrease(item.id, item.quantity)
+                          }
+                          className="px-3 py-1"
                         >
                           +
                         </button>
@@ -193,19 +137,16 @@ const Cart = ({ onClose }) => {
               </div>
 
               <button
-                onClick={handleCheckoutClick}
-                className="w-full bg-green-600 text-white py-4 rounded-xl font-bold hover:scale-105 transition"
+                onClick={() => setShowBookingModal(true)}
+                className="w-full bg-green-600 text-white py-4 rounded-xl font-bold"
               >
-                {language === "ar"
-                  ? "احجز الآن"
-                  : "Proceed to Booking"}
+                Proceed to Booking
               </button>
             </div>
           )}
         </div>
       </div>
 
-      {/* BOOKING MODAL */}
       {showBookingModal && (
         <BookingModal onClose={() => setShowBookingModal(false)} />
       )}

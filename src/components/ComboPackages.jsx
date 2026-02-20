@@ -24,7 +24,8 @@ const Toast = ({ message, onClose }) => {
 
 const ComboPackages = () => {
   const { language } = useLanguage();
-  const { cart, addToCart, removeFromCart } = useBooking();
+  const { cart, addToCart, removeFromCart, updateQuantity } = useBooking();
+
   const isAr = language === "ar";
 
   const [packages, setPackages] = useState([]);
@@ -33,7 +34,8 @@ const ComboPackages = () => {
   const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
-    api.get("/packages")
+    api
+      .get("/packages")
       .then((res) => setPackages(res.data.data || []))
       .finally(() => setLoading(false));
   }, []);
@@ -44,69 +46,66 @@ const ComboPackages = () => {
 
   const showToast = (msg) => setToast(msg);
 
-  const getCartQty = (id) => {
-    const items = cart.filter((item) => item._id === id);
-    return items.reduce((sum, item) => sum + item.quantity, 0);
+  const getCartItem = (pkgId) => {
+    return cart.find((item) => item._id === pkgId);
   };
 
+  const getCartQty = (pkgId) => {
+    const item = getCartItem(pkgId);
+    return item ? item.quantity : 0;
+  };
+
+  /* =========================
+     ADD
+  ========================= */
   const handleAdd = (pkg) => {
     addToCart({
       _id: pkg._id,
       name: pkg.title,
       nameAr: pkg.titleAr,
-      title: pkg.title,
-      titleAr: pkg.titleAr,
       items: pkg.items || [],
       itemsAr: pkg.itemsAr || [],
       price: pkg.price,
       quantity: 1,
       type: "package",
-      selectedDuration: null
+      selectedDuration: null,
     });
-    showToast(
-      isAr ? "✅ تمت الإضافة إلى السلة" : "✅ Added to cart"
-    );
+
+    showToast(isAr ? "✅ تمت الإضافة إلى السلة" : "✅ Added to cart");
   };
 
+  /* =========================
+     INCREMENT
+  ========================= */
   const handleIncrement = (pkg) => {
     addToCart({
       _id: pkg._id,
-      type: "package",
-      title: pkg.title,
-      titleAr: pkg.titleAr,
+      name: pkg.title,
+      nameAr: pkg.titleAr,
       items: pkg.items || [],
       itemsAr: pkg.itemsAr || [],
       price: pkg.price,
       quantity: 1,
-      selectedDuration: {
-        minutes: 0,
-        price: pkg.price,
-      },
+      type: "package",
+      selectedDuration: null,
     });
-    showToast(
-      isAr ? "➕ تمت زيادة الكمية" : "➕ Quantity increased"
-    );
+
+    showToast(isAr ? "➕ تمت زيادة الكمية" : "➕ Quantity increased");
   };
 
-  const handleDecrement = (id) => {
-    const currentQty = getCartQty(id);
+  /* =========================
+     DECREMENT (FIXED)
+  ========================= */
+  const handleDecrement = (pkgId) => {
+    const item = getCartItem(pkgId);
+    if (!item) return;
 
-    if (currentQty === 1) {
-      removeFromCart(id);
-      showToast(
-        isAr ? "🗑️ تم الحذف من السلة" : "🗑️ Removed from cart"
-      );
+    if (item.quantity <= 1) {
+      removeFromCart(item.id); // use item.id not _id
+      showToast(isAr ? "🗑️ تم الحذف من السلة" : "🗑️ Removed from cart");
     } else {
-      const item = cart.find((i) => i._id === id);
-      if (item) {
-        addToCart({
-          ...item,
-          quantity: -1,
-        });
-        showToast(
-          isAr ? "➖ تم تقليل الكمية" : "➖ Quantity decreased"
-        );
-      }
+      updateQuantity(item.id, item.quantity - 1);
+      showToast(isAr ? "➖ تم تقليل الكمية" : "➖ Quantity decreased");
     }
   };
 
@@ -124,22 +123,22 @@ const ComboPackages = () => {
   }
 
   return (
-    <section className="py-10 bg-gradient-to-br from-amber-50 via-yellow-50 to-white" id="packages">
+    <section
+      className="py-10 bg-gradient-to-br from-amber-50 via-yellow-50 to-white"
+      id="packages"
+    >
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
 
       <div className="max-w-7xl mx-auto px-4">
+
         {/* HEADING */}
         <div className="text-center mb-12">
-          <h2
-            className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3  bg-gradient-to-r from-amber-600 to-yellow-600 bg-clip-text text-transparent"
-            style={{ fontFamily: "Playfair Display, serif" }}
-          >
+          <h2 className="text-4xl font-bold bg-gradient-to-r from-amber-600 to-yellow-600 bg-clip-text text-transparent">
             {isAr ? "باقاتنا الفاخرة" : "Our Luxury Packages"}
           </h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-transparent via-amber-500 to-transparent mx-auto"></div>
         </div>
 
-        {/* GRID - Compact Design */}
+        {/* GRID */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
           {packages
             .filter((pkg) => pkg.isActive)
@@ -152,15 +151,13 @@ const ComboPackages = () => {
               return (
                 <div
                   key={pkg._id}
-                  className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 flex flex-col overflow-hidden border border-gray-100 hover:border-amber-500/30"
+                  className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all flex flex-col overflow-hidden border"
                 >
-                  {/* Top Golden Border */}
-                  <div className="h-0.5  bg-gradient-to-br from-amber-400 to-yellow-700"></div>
-
                   <div className="p-4 flex flex-col flex-1">
-                    {/* Price Badge - Compact */}
+
+                    {/* PRICE */}
                     <div className="flex justify-center mb-3">
-                      <div className=" bg-gradient-to-br from-amber-400 to-yellow-700 text-white px-5 py-1.5 rounded-full shadow-md">
+                      <div className="bg-gradient-to-br from-amber-400 to-yellow-700 text-white px-5 py-1.5 rounded-full shadow-md">
                         <span className="text-lg font-bold">{pkg.price}</span>
                         <span className="text-xs ml-1 font-semibold">
                           {isAr ? "درهم" : "AED"}
@@ -168,45 +165,45 @@ const ComboPackages = () => {
                       </div>
                     </div>
 
-                    {/* Package Title - Compact */}
-                    <h3 className="text-lg font-bold text-gray-800 text-center mb-3 min-h-[48px] flex items-center justify-center leading-tight">
+                    {/* TITLE */}
+                    <h3 className="text-lg font-bold text-center mb-3">
                       {title}
                     </h3>
 
-                    {/* Items List - Compact */}
-                    <ul className={`space-y-1.5 text-xs text-gray-700 flex-1 mb-4 ${isAr ? "text-right" : ""}`}>
+                    {/* ITEMS */}
+                    <ul className="space-y-1.5 text-xs text-gray-700 flex-1 mb-4">
                       {items.map((item, i) => (
-                        <li key={i} className="flex gap-2 items-start">
-                          <span className="text-amber-600 text-sm mt-0.5 flex-shrink-0">✓</span>
-                          <span className="leading-snug">{item}</span>
+                        <li key={i} className="flex gap-2">
+                          <span className="text-amber-600">✓</span>
+                          {item}
                         </li>
                       ))}
                     </ul>
 
-                    {/* CART BUTTONS - Compact */}
+                    {/* CART CONTROLS */}
                     {cartQty === 0 ? (
                       <button
                         onClick={() => handleAdd(pkg)}
-                        className="w-full py-2.5  bg-gradient-to-br from-amber-400 to-yellow-700 hover:from-amber-600 hover:to-amber-700 text-white text-sm rounded-full font-semibold transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-md"
+                        className="w-full py-2.5 bg-gradient-to-br from-amber-400 to-yellow-700 text-white text-sm rounded-full font-semibold transition hover:scale-105"
                       >
                         {isAr ? "أضف إلى السلة" : "Add to Cart"}
                       </button>
                     ) : (
-                      <div className="flex items-center justify-center gap-3 bg-gray-50 rounded-lg py-2 px-3 border border-gray-200">
+                      <div className="flex items-center justify-center gap-3 bg-gray-50 rounded-lg py-2 px-3 border">
                         <button
                           onClick={() => handleDecrement(pkg._id)}
-                          className="w-8 h-8 bg-white border-2 border-gray-300 hover:border-red-400 hover:bg-red-50 text-gray-700 hover:text-red-600 rounded-full shadow-sm font-bold text-base transition-all active:scale-90"
+                          className="w-8 h-8 bg-white border-2 rounded-full font-bold hover:bg-red-50"
                         >
                           −
                         </button>
 
-                        <span className="font-bold text-lg text-gray-800 min-w-[1.5rem] text-center">
+                        <span className="font-bold text-lg min-w-[1.5rem] text-center">
                           {cartQty}
                         </span>
 
                         <button
                           onClick={() => handleIncrement(pkg)}
-                          className="w-8 h-8 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white rounded-full shadow-md font-bold text-base transition-all active:scale-90"
+                          className="w-8 h-8 bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-full font-bold"
                         >
                           +
                         </button>
@@ -217,53 +214,7 @@ const ComboPackages = () => {
               );
             })}
         </div>
-
-        {/* MORE PACKAGES BUTTON */}
-        {packages.filter((pkg) => pkg.isActive).length > 8 && (
-          <div className="mt-10 text-center">
-            <button
-              onClick={() => setShowAll(!showAll)}
-              className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95"
-            >
-              <span>{showAll ? (isAr ? "عرض أقل" : "Show Less") : (isAr ? "المزيد من الباقات" : "More Packages")}</span>
-              <svg 
-                className={`w-5 h-5 transition-transform duration-300 ${showAll ? 'rotate-180' : ''}`}
-                fill="none" 
-                viewBox="0 0 24 24" 
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-            {!showAll && (
-              <p className="mt-3 text-sm text-gray-500">
-                {isAr 
-                  ? `${packages.filter((pkg) => pkg.isActive).length - 8} باقات أخرى متاحة`
-                  : `${packages.filter((pkg) => pkg.isActive).length - 8} more packages available`
-                }
-              </p>
-            )}
-          </div>
-        )}
       </div>
-
-      {/* Custom Animations */}
-      <style>{`
-        @keyframes slideIn {
-          from {
-            opacity: 0;
-            transform: translateX(100%);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-
-        .animate-slideIn {
-          animation: slideIn 0.3s ease-out;
-        }
-      `}</style>
     </section>
   );
 };

@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useMemo,
+} from "react";
 
 const BookingContext = createContext(null);
 
@@ -25,7 +31,7 @@ export const BookingProvider = ({ children }) => {
   });
 
   /* ================= ADD TO CART ================= */
-  const addToCart = (service) => {
+  const addToCart = useCallback((service) => {
     const uniqueId = service.selectedDuration
       ? `${service._id}-${service.selectedDuration.minutes}`
       : service._id;
@@ -36,7 +42,10 @@ export const BookingProvider = ({ children }) => {
       if (existing) {
         return prev.map((item) =>
           item.id === uniqueId
-            ? { ...item, quantity: item.quantity + (service.quantity || 1) }
+            ? {
+                ...item,
+                quantity: item.quantity + (service.quantity || 1),
+              }
             : item
         );
       }
@@ -44,7 +53,7 @@ export const BookingProvider = ({ children }) => {
       return [
         ...prev,
         {
-          id: uniqueId, // 🔥 IMPORTANT FIX (used in cart key)
+          id: uniqueId,
           _id: service._id,
           name: service.name || service.title,
           nameAr: service.nameAr || service.titleAr,
@@ -60,34 +69,41 @@ export const BookingProvider = ({ children }) => {
         },
       ];
     });
-  };
+  }, []);
 
   /* ================= UPDATE QUANTITY ================= */
-  const updateQuantity = (id, qty) => {
-    if (qty <= 0) {
-      removeFromCart(id);
-    } else {
-      setCart((prev) =>
-        prev.map((item) =>
+  const updateQuantity = useCallback((id, qty) => {
+    setCart((prev) =>
+      prev
+        .map((item) =>
           item.id === id ? { ...item, quantity: qty } : item
         )
-      );
-    }
-  };
+        .filter((item) => item.quantity > 0) // auto remove if 0
+    );
+  }, []);
 
   /* ================= REMOVE ================= */
-  const removeFromCart = (id) => {
+  const removeFromCart = useCallback((id) => {
     setCart((prev) => prev.filter((item) => item.id !== id));
-  };
+  }, []);
 
-  const clearCart = () => setCart([]);
+  const clearCart = useCallback(() => {
+    setCart([]);
+  }, []);
 
-  const getTotalAmount = () =>
-    cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  /* ================= MEMOIZED CALCULATIONS ================= */
+  const getTotalAmount = useMemo(() => {
+    return cart.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    );
+  }, [cart]);
 
-  const getCartCount = () =>
-    cart.reduce((sum, item) => sum + item.quantity, 0);
+  const getCartCount = useMemo(() => {
+    return cart.reduce((sum, item) => sum + item.quantity, 0);
+  }, [cart]);
 
+  /* ================= BOOKING DETAILS ================= */
   const updateBookingDetails = (details) => {
     setBookingDetails((prev) => ({
       ...prev,

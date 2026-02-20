@@ -43,7 +43,8 @@ const ServiceSkeleton = () => (
 
 const MenServices = () => {
   const { language } = useLanguage();
-  const { cart, addToCart, removeFromCart } = useBooking();
+  const { cart, addToCart, removeFromCart, updateQuantity } = useBooking();
+
   const { getServicesByGender, getCategories } = useAdmin();
 
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -94,10 +95,15 @@ const MenServices = () => {
      HELPERS
   ========================= */
 
-  const getServiceCartQty = (serviceId) => {
-    const items = cart.filter((item) => item._id === serviceId);
-    return items.reduce((sum, item) => sum + item.quantity, 0);
-  };
+const getCartItem = (serviceId) => {
+  return cart.find((item) => item._id === serviceId);
+};
+
+const getServiceCartQty = (serviceId) => {
+  const item = getCartItem(serviceId);
+  return item ? item.quantity : 0;
+};
+
 
   const isMassageOrSpa = (service) => {
     const category = service.category?.toLowerCase();
@@ -127,284 +133,280 @@ const MenServices = () => {
     );
   };
 
-  const handleIncrement = (e, service) => {
-    e.stopPropagation();
-    
-    addToCart({
-      ...service,
-      selectedDuration: {
-        minutes: parseInt(service.duration) || 60,
-        price: service.price,
-      },
-      quantity: 1,
-    });
+ const handleIncrement = (e, service) => {
+  e.stopPropagation();
 
+  addToCart({
+    ...service,
+    selectedDuration: {
+      minutes: parseInt(service.duration) || 60,
+      price: service.price,
+    },
+    quantity: 1,
+  });
+
+  showToast(
+    language === "ar"
+      ? "➕ تمت زيادة الكمية"
+      : "➕ Quantity increased"
+  );
+};
+
+
+const handleDecrement = (e, serviceId) => {
+  e.stopPropagation();
+
+  const item = getCartItem(serviceId);
+  if (!item) return;
+
+  if (item.quantity <= 1) {
+    removeFromCart(item.id); // ⚠ MUST use item.id
     showToast(
       language === "ar"
-        ? "✅ تمت الإضافة إلى السلة"
-        : "✅ Added to cart"
+        ? "🗑️ تم الإزالة من السلة"
+        : "🗑️ Removed from cart"
     );
-  };
+  } else {
+    updateQuantity(item.id, item.quantity - 1);
+    showToast(
+      language === "ar"
+        ? "➖ تم تقليل الكمية"
+        : "➖ Quantity decreased"
+    );
+  }
+};
 
-  const handleDecrement = (e, serviceId) => {
-    e.stopPropagation();
-    
-    const currentQty = getServiceCartQty(serviceId);
-    if (currentQty === 1) {
-      removeFromCart(serviceId);
-      showToast(
-        language === "ar"
-          ? "🗑️ تم الإزالة من السلة"
-          : "🗑️ Removed from cart"
-      );
-    } else {
-      // Find the first cart item with this serviceId and reduce its quantity
-      const cartItem = cart.find((item) => item._id === serviceId);
-      if (cartItem) {
-        addToCart({
-          ...cartItem,
-          quantity: -1, // This will decrease the quantity
-        });
-        showToast(
-          language === "ar"
-            ? "➖ تم تقليل الكمية"
-            : "➖ Quantity decreased"
-        );
-      }
-    }
-  };
-// Create unique categories from services
-const uniqueCategories = [
-  ...new Map(
-    services.map((s) => [
-      s.category,
-      {
-        key: s.category,
-        name: s.category,
-        nameAr: s.categoryAr,
-      },
-    ])
-  ).values(),
-];
+
+  // Create unique categories from services
+  const uniqueCategories = [
+    ...new Map(
+      services.map((s) => [
+        s.category,
+        {
+          key: s.category,
+          name: s.category,
+          nameAr: s.categoryAr,
+        },
+      ])
+    ).values(),
+  ];
 
   /* =========================
      UI
   ========================= */
 
- return (
-  <section className="pt-28 pb-0 bg-gray-50 min-h-screen">
-    {/* Toast Notification */}
-    {toast && <Toast message={toast} onClose={() => setToast(null)} />}
+  return (
+    <section className="pt-28 pb-0 bg-gray-50 min-h-screen">
+      {/* Toast Notification */}
+      {toast && <Toast message={toast} onClose={() => setToast(null)} />}
 
-    <div className="max-w-7xl mx-auto px-4">
+      <div className="max-w-7xl mx-auto px-4">
 
-      {/* ================= SEARCH + CATEGORY ================= */}
-      <div className="mb-10 space-y-6">
+        {/* ================= SEARCH + CATEGORY ================= */}
+        <div className="mb-10 space-y-6">
 
-        {/* ================= SEARCH (CENTER DESKTOP) ================= */}
-        <div className="relative max-w-xl mx-auto">
-          <input
-            type="text"
-            placeholder={
-              language === "ar"
-                ? "ابحث عن خدمة..."
-                : "Search services..."
-            }
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-12 pr-4 py-4 rounded-2xl bg-white border-2 border-gray-300 focus:border-amber-500 focus:ring-4 focus:ring-amber-100 outline-none shadow-md text-base font-medium transition-all"
-          />
-          <svg
-            className="absolute left-4 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-500"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+          {/* ================= SEARCH (CENTER DESKTOP) ================= */}
+          <div className="relative max-w-xl mx-auto">
+            <input
+              type="text"
+              placeholder={
+                language === "ar"
+                  ? "ابحث عن خدمة..."
+                  : "Search services..."
+              }
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-12 pr-4 py-4 rounded-2xl bg-white border-2 border-gray-300 focus:border-amber-400 focus:ring-4 focus:ring-amber-100 outline-none shadow-md text-base font-medium transition-all"
             />
-          </svg>
+            <svg
+              className="absolute left-4 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+          </div>
+
+          {/* ================= CATEGORY BUTTONS ================= */}
+          <div className="relative">
+            <div className="flex gap-2 sm:gap-3 overflow-x-auto pb-3 scrollbar-hide px-1">
+
+              {/* ALL SERVICES */}
+              <button
+                onClick={() => setSelectedCategory("all")}
+                className={`px-4 py-2 sm:px-6 sm:py-3 rounded-full text-xs sm:text-sm font-bold transition-all whitespace-nowrap transform active:scale-95 ${
+                  selectedCategory === "all"
+                    ? "bg-gradient-to-br from-amber-400 to-yellow-700 text-white shadow-lg scale-105 hover:shadow-xl"
+                    : "bg-white border-2 border-gray-200 text-gray-700 hover:border-amber-400 hover:shadow-md"
+                }`}
+              >
+                {language === "ar" ? "جميع الخدمات" : "All Services"}
+              </button>
+              
+              {/* BACKEND DRIVEN CATEGORIES */}
+              {uniqueCategories.map((cat) => (
+                <button
+                  key={cat.key}
+                  onClick={() => setSelectedCategory(cat.key)}
+                  className={`px-4 py-2 sm:px-6 sm:py-3 rounded-full text-xs sm:text-sm font-bold transition-all whitespace-nowrap transform active:scale-95 ${
+                    selectedCategory === cat.key
+                      ? "bg-gradient-to-br from-amber-400 to-yellow-700 text-white shadow-lg scale-105 hover:shadow-xl"
+                      : "bg-white border-2 border-gray-200 text-gray-700 hover:border-amber-400 hover:shadow-md"
+                  }`}
+                >
+                  {language === "ar" ? cat.nameAr : cat.name}
+                </button>
+              ))}
+            </div>
+
+            {/* GOLDEN LINE */}
+            <div className="pointer-events-none absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-amber-400 to-transparent opacity-80" />
+          </div>
+
         </div>
 
-        {/* ================= CATEGORY BUTTONS ================= */}
-        {/* ================= CATEGORY BUTTONS ================= */}
-<div className="relative">
-  <div className="flex gap-2 sm:gap-3 overflow-x-auto pb-3 scrollbar-hide px-1">
+        {/* ================= GRID ================= */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-12">
 
-    {/* ALL SERVICES */}
-    <button
-      onClick={() => setSelectedCategory("all")}
-      className={`px-4 py-2 sm:px-6 sm:py-3 rounded-full text-xs sm:text-sm font-bold transition-all whitespace-nowrap ${
-        selectedCategory === "all"
-          ? "bg-amber-500 text-white shadow-lg scale-105"
-          : "bg-white border-2 border-gray-200 text-gray-700 hover:border-amber-300 hover:shadow"
-      }`}
-    >
-      {language === "ar" ? "جميع الخدمات" : "All Services"}
-    </button>
+          {isLoading ? (
+            [...Array(8)].map((_, i) => <ServiceSkeleton key={i} />)
+          ) : filteredServices.length === 0 ? (
+            <div className="col-span-full text-center py-20">
+              <div className="text-gray-400 text-6xl mb-4">🔍</div>
+              <p className="text-xl font-semibold text-gray-600">
+                {language === "ar"
+                  ? "لم يتم العثور على خدمات"
+                  : "No services found"}
+              </p>
+            </div>
+          ) : (
+            filteredServices.map((service) => {
+              const cartQty = getServiceCartQty(service._id);
+              const isMassage = isMassageOrSpa(service);
 
-    {/* BACKEND DRIVEN CATEGORIES */}
-    {uniqueCategories.map((cat) => (
-      <button
-        key={cat.key}
-        onClick={() => setSelectedCategory(cat.key)}
-        className={`px-4 py-2 sm:px-6 sm:py-3 rounded-full text-xs sm:text-sm font-bold transition-all whitespace-nowrap ${
-          selectedCategory === cat.key
-            ? "bg-amber-500 text-white shadow-lg scale-105"
-            : "bg-white border-2 border-gray-200 text-gray-700 hover:border-amber-300 hover:shadow"
-        }`}
-      >
-        {language === "ar" ? cat.nameAr : cat.name}
-      </button>
-    ))}
-  </div>
+              const basePrice =
+                isMassage && service.durations?.length
+                  ? service.durations[0].price
+                  : service.price;
 
-  {/* GOLDEN LINE */}
-  <div className="pointer-events-none absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-amber-400 to-transparent opacity-80" />
-</div>
-
-      </div>
-
-      {/* ================= GRID ================= */}
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-12">
-
-        {isLoading ? (
-          [...Array(8)].map((_, i) => <ServiceSkeleton key={i} />)
-        ) : filteredServices.length === 0 ? (
-          <div className="col-span-full text-center py-20">
-            <div className="text-gray-400 text-6xl mb-4">🔍</div>
-            <p className="text-xl font-semibold text-gray-600">
-              {language === "ar"
-                ? "لم يتم العثور على خدمات"
-                : "No services found"}
-            </p>
-          </div>
-        ) : (
-          filteredServices.map((service) => {
-            const cartQty = getServiceCartQty(service._id);
-            const isMassage = isMassageOrSpa(service);
-
-            const basePrice =
-              isMassage && service.durations?.length
-                ? service.durations[0].price
-                : service.price;
-
-            return (
-              <div
-                key={service._id}
-                onClick={() => {
-                  if (isMassage) setSelectedService(service);
-                }}
-                className="group bg-white rounded-[2rem] overflow-hidden border border-gray-100 hover:border-amber-200 transition-all duration-300 cursor-pointer flex flex-col shadow-sm hover:shadow-xl hover:-translate-y-1"
-              >
-                {/* IMAGE */}
-                <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
-                  <img
-                    src={service.imageUrl || service.image}
-                    alt={service.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition duration-700"
-                  />
-                  {cartQty > 0 && (
-                    <div className="absolute top-3 right-3 bg-amber-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shadow-lg">
-                      {cartQty}
-                    </div>
-                  )}
-                </div>
-
-                {/* CONTENT */}
-                <div className="p-5 flex flex-col flex-1">
-                  <h3 className="font-bold text-lg text-gray-900 mb-1 line-clamp-1">
-                    {language === "ar"
-                      ? service.nameAr
-                      : service.name}
-                  </h3>
-
-                  <p className="text-xs text-gray-500 mb-4 line-clamp-2 flex-1">
-                    {language === "ar"
-                      ? service.descriptionAr
-                      : service.description}
-                  </p>
-
-                  {/* PRICE */}
-                  <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                    <div>
-                      <span className="text-[10px] font-bold text-gray-400 uppercase">
-                        {isMassage ? "Starts from" : "Price"}
-                      </span>
-                      <span className="text-xl font-black text-amber-600 block">
-                        {basePrice} <span className="text-xs">AED</span>
-                      </span>
-                    </div>
-
-                    {cartQty === 0 ? (
-                      <button
-                        onClick={(e) =>
-                          isMassage
-                            ? setSelectedService(service)
-                            : handleDirectAdd(e, service)
-                        }
-                        className="px-5 py-2.5 rounded-xl bg-amber-500 text-white font-bold text-sm hover:bg-amber-600 active:scale-95 transition-all shadow-md hover:shadow-lg"
-                      >
-                        {isMassage ? "Select" : "Add +"}
-                      </button>
-                    ) : (
-                      <div
-                        className="flex items-center bg-gray-100 rounded-xl overflow-hidden shadow-md"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <button
-                          onClick={(e) => handleDecrement(e, service._id)}
-                          className="w-9 h-9 flex items-center justify-center bg-white hover:bg-gray-50 active:scale-95 transition-all text-gray-700 font-bold text-lg"
-                        >
-                          −
-                        </button>
-
-                        <span className="px-4 font-bold text-base min-w-[40px] text-center">
-                          {cartQty}
-                        </span>
-
-                        <button
-                          onClick={(e) => handleIncrement(e, service)}
-                          className="w-9 h-9 flex items-center justify-center bg-amber-500 text-white hover:bg-amber-600 active:scale-95 transition-all font-bold text-lg"
-                        >
-                          +
-                        </button>
+              return (
+                <div
+                  key={service._id}
+                  onClick={() => {
+                    if (isMassage) setSelectedService(service);
+                  }}
+                  className="group bg-white rounded-[2rem] overflow-hidden border border-gray-100 hover:border-amber-300 transition-all duration-300 cursor-pointer flex flex-col shadow-sm hover:shadow-xl hover:-translate-y-1"
+                >
+                  {/* IMAGE */}
+                  <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
+                    <img
+                      src={service.imageUrl || service.image}
+                      alt={service.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition duration-700"
+                    />
+                    {cartQty > 0 && (
+                      <div className="absolute top-3 right-3 bg-gradient-to-br from-amber-400 to-yellow-700 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shadow-lg">
+                        {cartQty}
                       </div>
                     )}
                   </div>
+
+                  {/* CONTENT */}
+                  <div className="p-5 flex flex-col flex-1">
+                    <h3 className="font-bold text-lg text-gray-900 mb-1 line-clamp-1">
+                      {language === "ar"
+                        ? service.nameAr
+                        : service.name}
+                    </h3>
+
+                    <p className="text-xs text-gray-500 mb-4 line-clamp-2 flex-1">
+                      {language === "ar"
+                        ? service.descriptionAr
+                        : service.description}
+                    </p>
+
+                    {/* PRICE */}
+                    <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                      <div>
+                        <span className="text-[10px] font-bold text-gray-400 uppercase">
+                          {isMassage ? "Starts from" : "Price"}
+                        </span>
+                        <span className="text-xl font-black bg-gradient-to-r from-amber-400 to-yellow-700 bg-clip-text text-transparent block">
+                          {basePrice} <span className="text-xs text-gray-600">AED</span>
+                        </span>
+                      </div>
+
+                      {cartQty === 0 ? (
+                        <button
+                          onClick={(e) =>
+                            isMassage
+                              ? setSelectedService(service)
+                              : handleDirectAdd(e, service)
+                          }
+                          className="px-5 py-2.5 rounded-full bg-gradient-to-br from-amber-400 to-yellow-700 text-white font-bold text-sm hover:shadow-lg active:scale-95 transition-all shadow-md transform hover:scale-105"
+                        >
+                          {isMassage ? "Select" : "Add +"}
+                        </button>
+                      ) : (
+                        <div
+                          className="flex items-center bg-gray-100 rounded-full overflow-hidden shadow-md"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <button
+                            onClick={(e) => handleDecrement(e, service._id)}
+                            className="w-9 h-9 flex items-center justify-center bg-white hover:bg-gray-50 active:scale-95 transition-all text-gray-700 font-bold text-lg"
+                          >
+                            −
+                          </button>
+
+                          <span className="px-4 font-bold text-base min-w-[40px] text-center text-gray-900">
+                            {cartQty}
+                          </span>
+
+                          <button
+                            onClick={(e) => handleIncrement(e, service)}
+                            className="w-9 h-9 flex items-center justify-center bg-gradient-to-br from-amber-400 to-yellow-700 text-white hover:shadow-md active:scale-95 transition-all font-bold text-lg"
+                          >
+                            +
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            );
-          })
-        )}
+              );
+            })
+          )}
+        </div>
       </div>
-    </div>
 
-    {/* MODAL */}
-    {selectedService && (
-      <ServiceDetailsModal
-        service={selectedService}
-        onClose={() => setSelectedService(null)}
-        onSuccess={showToast}
-      />
-    )}
- <style>{`
+      {/* MODAL */}
+      {selectedService && (
+        <ServiceDetailsModal
+          service={selectedService}
+          onClose={() => setSelectedService(null)}
+          onSuccess={showToast}
+        />
+      )}
 
-      .scrollbar-hide::-webkit-scrollbar {
-        display: none;
-      }
+      <style>{`
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
 
-      .scrollbar-hide {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-      }
-    `}</style>
-  </section>
-);
-
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
+    </section>
+  );
 };
 
 export default MenServices;
