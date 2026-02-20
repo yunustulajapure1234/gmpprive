@@ -195,7 +195,7 @@ const Contact = () => {
               <div className="flex items-center gap-2.5 px-4 py-3 bg-white border-b border-gray-100">
                 <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
                 <span className="text-gray-700 text-sm font-medium flex-1">
-                  GMP Privé — Irise Tower, Barsha Heights, Dubai
+                  GMP Prive — Irise Tower, Barsha Heights, Dubai
                 </span>
                 <a
                   href="https://maps.google.com/?q=Irise+Tower+Barsha+Heights+Dubai"
