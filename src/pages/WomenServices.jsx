@@ -4,382 +4,375 @@ import { useBooking } from "../context/BookingContext";
 import { useAdmin } from "../context/AdminContext";
 import ServiceDetailsModal from "../components/ServiceDetailsModal";
 
-/* =========================
-   TOAST NOTIFICATION
-========================= */
-const Toast = ({ message, onClose }) => {
-  useEffect(() => {
-    const timer = setTimeout(onClose, 3000);
-    return () => clearTimeout(timer);
-  }, [onClose]);
+/* ─── floating salon icons — feminine theme ─── */
+const SALON_ICONS = [
+  { icon: "💄", size: 26, top: "8%",  left: "4%",   dur: 4.2, delay: 0 },
+  { icon: "💅", size: 22, top: "14%", left: "88%",   dur: 5.1, delay: 0.8 },
+  { icon: "🌸", size: 24, top: "28%", left: "5%",    dur: 3.8, delay: 1.2 },
+  { icon: "✨", size: 18, top: "22%", left: "93%",   dur: 4.7, delay: 0.4 },
+  { icon: "🪞", size: 22, top: "48%", left: "2%",    dur: 5.5, delay: 1.6 },
+  { icon: "🌺", size: 20, top: "54%", left: "94%",   dur: 4.0, delay: 0.6 },
+  { icon: "🧖", size: 24, top: "68%", left: "4%",    dur: 5.2, delay: 2.0 },
+  { icon: "🛁", size: 22, top: "72%", left: "91%",   dur: 4.4, delay: 1.0 },
+  { icon: "🌹", size: 20, top: "86%", left: "6%",    dur: 3.9, delay: 0.3 },
+  { icon: "💆", size: 24, top: "84%", left: "88%",   dur: 5.0, delay: 1.4 },
+  { icon: "🪷", size: 18, top: "40%", left: "96%",   dur: 3.5, delay: 0.9 },
+  { icon: "🧴", size: 18, top: "62%", left: "1%",    dur: 4.8, delay: 1.8 },
+];
 
+/* ─── Toast ─── */
+const Toast = ({ message, onClose }) => {
+  useEffect(() => { const t = setTimeout(onClose, 3000); return () => clearTimeout(t); }, [onClose]);
   return (
-    <div className="fixed top-6 right-6 z-[100] animate-slide-in-right">
-      <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 px-6 py-4 flex items-center gap-3 min-w-[280px]">
-        <div className="flex-shrink-0 w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-          <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-          </svg>
+    <div style={{ position:"fixed", top:24, right:24, zIndex:9999, animation:"toastPop .3s ease" }}>
+      <div style={{ background:"#fff", borderRadius:16, boxShadow:"0 8px 32px rgba(0,0,0,.15)", border:"1px solid #f0f0f0", padding:"14px 20px", display:"flex", alignItems:"center", gap:12, minWidth:260 }}>
+        <div style={{ width:34, height:34, borderRadius:"50%", background:"#dcfce7", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+          <svg width="18" height="18" fill="none" stroke="#16a34a" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/></svg>
         </div>
-        <p className="text-sm font-semibold text-gray-900">{message}</p>
+        <p style={{ fontSize:13, fontWeight:600, color:"#111", margin:0, fontFamily:"'DM Sans',sans-serif" }}>{message}</p>
       </div>
     </div>
   );
 };
 
-/* =========================
-   SKELETON
-========================= */
+/* ─── Skeleton ─── */
 const ServiceSkeleton = () => (
-  <div className="bg-white rounded-[2rem] overflow-hidden border border-gray-100 animate-pulse h-full flex flex-col shadow-sm">
-    <div className="aspect-[4/3] bg-gray-200" />
-    <div className="p-6 flex-1 space-y-3">
-      <div className="h-5 bg-gray-200 rounded w-3/4" />
-      <div className="h-4 bg-gray-100 rounded w-full" />
-      <div className="h-4 bg-gray-100 rounded w-5/6" />
+  <div style={{ background:"#fff", borderRadius:22, overflow:"hidden", border:"1px solid #fce7f3" }}>
+    <div style={{ aspectRatio:"4/3", background:"linear-gradient(90deg,#fce7f3 25%,#fff5f8 50%,#fce7f3 75%)", backgroundSize:"200% 100%", animation:"skeletonShimmer 1.4s ease infinite" }} />
+    <div style={{ padding:18, display:"flex", flexDirection:"column", gap:10 }}>
+      <div style={{ height:15, background:"#fce7f3", borderRadius:8, width:"65%", animation:"skeletonShimmer 1.4s ease infinite" }} />
+      <div style={{ height:11, background:"#fdf2f8", borderRadius:8, animation:"skeletonShimmer 1.4s ease .1s infinite" }} />
+      <div style={{ height:11, background:"#fdf2f8", borderRadius:8, width:"80%", animation:"skeletonShimmer 1.4s ease .2s infinite" }} />
     </div>
   </div>
 );
 
+/* ════════════════════════════════════════════
+   MAIN
+════════════════════════════════════════════ */
 const WomenServices = () => {
   const { language } = useLanguage();
- const { cart, addToCart, removeFromCart, updateQuantity } = useBooking();
-
+  const { cart, addToCart, removeFromCart, updateQuantity } = useBooking();
   const { getServicesByGender, getCategories } = useAdmin();
 
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedService, setSelectedService] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [toast, setToast] = useState(null);
+  const [searchQuery, setSearchQuery]           = useState("");
+  const [selectedService, setSelectedService]   = useState(null);
+  const [isLoading, setIsLoading]               = useState(true);
+  const [toast, setToast]                       = useState(null);
 
-  /* =========================
-     DATA
-  ========================= */
-  const services = useMemo(
-    () => getServicesByGender("women"),
-    [getServicesByGender]
-  );
+  const isAr = language === "ar";
 
-  const categories = useMemo(
-    () => getCategories("women"),
-    [getCategories]
-  );
+  const services   = useMemo(() => getServicesByGender("women"), [getServicesByGender]);
+  const categories = useMemo(() => getCategories("women"),       [getCategories]);
 
   useEffect(() => {
-    if (services.length > 0) {
-      const timer = setTimeout(() => setIsLoading(false), 600);
-      return () => clearTimeout(timer);
-    }
+    if (services.length > 0) { const t = setTimeout(() => setIsLoading(false), 600); return () => clearTimeout(t); }
   }, [services]);
 
-  /* =========================
-     FILTER
-  ========================= */
-  const filteredServices = useMemo(() => {
-    return services.filter((service) => {
-      const matchCategory =
-        selectedCategory === "all" ||
-        service.category === selectedCategory;
+  const filteredServices = useMemo(() => services.filter(s => {
+    const matchCat = selectedCategory === "all" || s.category === selectedCategory;
+    const matchQ   = !searchQuery || s.name?.toLowerCase().includes(searchQuery.toLowerCase()) || s.nameAr?.includes(searchQuery);
+    return matchCat && matchQ;
+  }), [services, selectedCategory, searchQuery]);
 
-      const matchSearch =
-        searchQuery === "" ||
-        service.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        service.nameAr?.includes(searchQuery);
-
-      return matchCategory && matchSearch;
-    });
-  }, [services, selectedCategory, searchQuery]);
-
-  /* =========================
-     HELPERS
-  ========================= */
-
-/* =========================
-   CART HELPERS (FIXED)
-========================= */
-
-const getCartItem = (serviceId) => {
-  return cart.find((item) => item._id === serviceId);
-};
-
-const getServiceCartQty = (serviceId) => {
-  const item = getCartItem(serviceId);
-  return item ? item.quantity : 0;
-};
-
-
-  const isMassageOrSpa = (service) => {
-    const category = service.category?.toLowerCase();
-    return category?.includes("massage") || category?.includes("spa");
-  };
-
-  const showToast = (message) => {
-    setToast(message);
-  };
+  const getCartItem  = id  => cart.find(i => i._id === id);
+  const getQty       = id  => { const i = getCartItem(id); return i ? i.quantity : 0; };
+  const isMspa       = s   => { const c = s.category?.toLowerCase(); return c?.includes("massage") || c?.includes("spa"); };
+  const showToast    = msg => setToast(msg);
 
   const handleDirectAdd = (e, service) => {
     e.stopPropagation();
-
-    addToCart({
-      ...service,
-      selectedDuration: {
-        minutes: parseInt(service.duration) || 60,
-        price: service.price,
-      },
-      quantity: 1,
-    });
-
-    showToast(
-      language === "ar"
-        ? "✅ تمت الإضافة إلى السلة"
-        : "✅ Added to cart successfully"
-    );
+    addToCart({ ...service, selectedDuration: { minutes: parseInt(service.duration)||60, price: service.price }, quantity: 1 });
+    showToast(isAr ? "✅ تمت الإضافة إلى السلة" : "✅ Added to cart successfully");
+  };
+  const handleIncrement = (e, service) => {
+    e.stopPropagation();
+    addToCart({ ...service, selectedDuration: { minutes: parseInt(service.duration)||60, price: service.price }, quantity: 1 });
+    showToast(isAr ? "➕ تمت زيادة الكمية" : "➕ Quantity increased");
+  };
+  const handleDecrement = (e, serviceId) => {
+    e.stopPropagation();
+    const item = getCartItem(serviceId);
+    if (!item) return;
+    if (item.quantity <= 1) { removeFromCart(item.id); showToast(isAr ? "🗑️ تم الإزالة من السلة" : "🗑️ Removed from cart"); }
+    else { updateQuantity(item.id, item.quantity - 1); showToast(isAr ? "➖ تم تقليل الكمية" : "➖ Quantity decreased"); }
   };
 
-const handleIncrement = (e, service) => {
-  e.stopPropagation();
-
-  addToCart({
-    ...service,
-    selectedDuration: {
-      minutes: parseInt(service.duration) || 60,
-      price: service.price,
-    },
-    quantity: 1,
-  });
-
-  showToast(
-    language === "ar"
-      ? "➕ تمت زيادة الكمية"
-      : "➕ Quantity increased"
-  );
-};
-
-
-
-const handleDecrement = (e, serviceId) => {
-  e.stopPropagation();
-
-  const item = getCartItem(serviceId);
-  if (!item) return;
-
-  if (item.quantity <= 1) {
-    removeFromCart(item.id); // ⚠ MUST use item.id
-    showToast(
-      language === "ar"
-        ? "🗑️ تم الإزالة من السلة"
-        : "🗑️ Removed from cart"
-    );
-  } else {
-    updateQuantity(item.id, item.quantity - 1);
-    showToast(
-      language === "ar"
-        ? "➖ تم تقليل الكمية"
-        : "➖ Quantity decreased"
-    );
-  }
-};
-
-
-  // Create unique categories from services
-  const uniqueCategories = [
-    ...new Map(
-      services.map((s) => [
-        s.category,
-        {
-          key: s.category,
-          name: s.category,
-          nameAr: s.categoryAr,
-        },
-      ])
-    ).values(),
-  ];
-
-  /* =========================
-     UI
-  ========================= */
+  const uniqueCategories = [...new Map(services.map(s => [s.category, { key: s.category, name: s.category, nameAr: s.categoryAr }])).values()];
 
   return (
-    <section className="pt-28 pb-0 bg-gray-50 min-h-screen">
-      {/* Toast Notification */}
+    <div dir={isAr ? "rtl" : "ltr"} style={{ minHeight:"100vh", background:"#fff9fb", paddingTop:100, position:"relative", overflow:"hidden" }}>
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}
 
-      <div className="max-w-7xl mx-auto px-4">
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
 
-        {/* ================= SEARCH + CATEGORY ================= */}
-        <div className="mb-10 space-y-6">
+        @keyframes toastPop        { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes fadeUpPage      { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes floatA          { 0%,100%{transform:translateY(0) rotate(-4deg) scale(1)} 50%{transform:translateY(-12px) rotate(4deg) scale(1.08)} }
+        @keyframes floatB          { 0%,100%{transform:translateY(0) rotate(6deg) scale(1)} 50%{transform:translateY(-9px) rotate(-5deg) scale(1.06)} }
+        @keyframes floatC          { 0%,100%{transform:translateY(0) rotate(-8deg) scale(1)} 50%{transform:translateY(-14px) rotate(6deg) scale(1.1)} }
+        @keyframes pulseDot        { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.7);opacity:.4} }
+        @keyframes roseShimmer     { 0%{background-position:200% center} 100%{background-position:-200% center} }
+        @keyframes skeletonShimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
+        @keyframes cardIn          { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
 
-          {/* ================= SEARCH (CENTER DESKTOP) ================= */}
-          <div className="relative max-w-xl mx-auto">
-            <input
-              type="text"
-              placeholder={
-                language === "ar"
-                  ? "ابحث عن خدمة..."
-                  : "Search services..."
-              }
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-4 rounded-2xl bg-white border-2 border-gray-300 focus:border-amber-400 focus:ring-4 focus:ring-amber-100 outline-none shadow-md text-base font-medium transition-all"
-            />
-            <svg
-              className="absolute left-4 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-          </div>
+        .pf  { animation: fadeUpPage .55s ease both; }
+        .pf1 { animation: fadeUpPage .55s .1s ease both; }
+        .pf2 { animation: fadeUpPage .55s .18s ease both; }
+        .pf3 { animation: fadeUpPage .55s .26s ease both; }
 
-          {/* ================= CATEGORY BUTTONS ================= */}
-          <div className="relative">
-            <div className="flex gap-2 sm:gap-3 overflow-x-auto pb-3 scrollbar-hide px-1">
+        /* rose-gold heading */
+        .rose-heading {
+          font-family:'Playfair Display',Georgia,serif;
+          font-weight:900; line-height:1.15; letter-spacing:-.01em;
+          color:#9d174d;
+          background:linear-gradient(120deg,#831843,#be185d,#f472b6,#be185d,#831843);
+          background-size:300% auto;
+          -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+          background-clip:text;
+          animation:roseShimmer 5s linear infinite;
+        }
+        @supports not (-webkit-background-clip:text){
+          .rose-heading { color:#9d174d !important; background:none !important; }
+        }
 
-              {/* ALL SERVICES */}
-              <button
-                onClick={() => setSelectedCategory("all")}
-                className={`px-4 py-2 sm:px-6 sm:py-3 rounded-full text-xs sm:text-sm font-bold transition-all whitespace-nowrap transform active:scale-95 ${
-                  selectedCategory === "all"
-                    ? "bg-gradient-to-br from-amber-400 to-yellow-700 text-white shadow-lg scale-105 hover:shadow-xl"
-                    : "bg-white border-2 border-gray-200 text-gray-700 hover:border-amber-400 hover:shadow-md"
-                }`}
-              >
-                {language === "ar" ? "جميع الخدمات" : "All Services"}
-              </button>
-              
-              {/* BACKEND DRIVEN CATEGORIES */}
-              {uniqueCategories.map((cat) => (
-                <button
-                  key={cat.key}
-                  onClick={() => setSelectedCategory(cat.key)}
-                  className={`px-4 py-2 sm:px-6 sm:py-3 rounded-full text-xs sm:text-sm font-bold transition-all whitespace-nowrap transform active:scale-95 ${
-                    selectedCategory === cat.key
-                      ? "bg-gradient-to-br from-amber-400 to-yellow-700 text-white shadow-lg scale-105 hover:shadow-xl"
-                      : "bg-white border-2 border-gray-200 text-gray-700 hover:border-amber-400 hover:shadow-md"
-                  }`}
-                >
-                  {language === "ar" ? cat.nameAr : cat.name}
-                </button>
-              ))}
-            </div>
+        /* category pills — rose theme */
+        .cat-pill {
+          font-family:'DM Sans',sans-serif;
+          display:inline-flex; align-items:center; gap:6px;
+          padding:7px 15px; border-radius:999px; font-size:12px; font-weight:600;
+          letter-spacing:.03em; white-space:nowrap; cursor:pointer;
+          border:1.5px solid rgba(190,24,93,.2);
+          background:rgba(255,255,255,.9); color:#831843;
+          transition:all .2s ease; backdrop-filter:blur(6px);
+          box-shadow:0 1px 6px rgba(0,0,0,.05);
+        }
+        .cat-pill:hover  { border-color:#f472b6; box-shadow:0 4px 16px rgba(190,24,93,.2); transform:translateY(-2px); }
+        .cat-pill.active { background:linear-gradient(135deg,#f472b6,#9d174d); border-color:transparent; color:#fff; box-shadow:0 6px 20px rgba(190,24,93,.38); transform:translateY(-2px); }
+        .cat-count { font-size:10px; font-weight:800; padding:1px 7px; border-radius:999px; background:rgba(255,255,255,.28); }
+        .cat-pill:not(.active) .cat-count { background:#fce7f3; color:#be185d; }
 
-            {/* GOLDEN LINE */}
-            <div className="pointer-events-none absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-amber-400 to-transparent opacity-80" />
-          </div>
+        /* cards */
+        .svc-card {
+          background:#fff; border-radius:22px; overflow:hidden;
+          border:1px solid rgba(252,231,243,.8);
+          box-shadow:0 2px 14px rgba(0,0,0,.05);
+          display:flex; flex-direction:column; cursor:pointer;
+          transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease;
+          animation:cardIn .5s ease both;
+        }
+        .svc-card:hover { transform:translateY(-7px); box-shadow:0 22px 48px rgba(190,24,93,.1); border-color:rgba(244,114,182,.4); }
+        .svc-card:hover .card-img-inner { transform:scale(1.07); }
+        .card-img-inner { width:100%; height:100%; object-fit:cover; display:block; transition:transform .7s ease; }
 
+        /* add button */
+        .add-btn {
+          font-family:'DM Sans',sans-serif; font-size:11px; font-weight:700;
+          letter-spacing:.05em; text-transform:uppercase;
+          background:linear-gradient(135deg,#f472b6,#9d174d); color:#fff;
+          border:none; border-radius:999px; padding:9px 18px; cursor:pointer;
+          box-shadow:0 4px 14px rgba(190,24,93,.32); transition:all .2s ease; white-space:nowrap;
+        }
+        .add-btn:hover  { transform:scale(1.06); box-shadow:0 7px 20px rgba(190,24,93,.45); }
+        .add-btn:active { transform:scale(.95); }
+
+        /* qty */
+        .qty-wrap { display:flex; align-items:center; background:#fdf2f8; border-radius:999px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.07); }
+        .qty-btn  { width:34px; height:34px; border:none; background:transparent; font-size:18px; font-weight:700; cursor:pointer; color:#888; display:flex; align-items:center; justify-content:center; transition:all .15s; }
+        .qty-btn:hover     { background:rgba(244,114,182,.15); color:#9d174d; }
+        .qty-btn.qplus     { background:linear-gradient(135deg,#f472b6,#9d174d); color:#fff; }
+        .qty-btn.qplus:hover { opacity:.88; }
+
+        /* search */
+        .search-box {
+          font-family:'DM Sans',sans-serif; width:100%;
+          padding:12px 18px 12px 44px; border-radius:14px;
+          border:1.5px solid rgba(244,114,182,.25);
+          background:rgba(255,255,255,.94); backdrop-filter:blur(8px);
+          font-size:13px; font-weight:500; color:#1a0a10;
+          outline:none; box-shadow:0 2px 12px rgba(0,0,0,.05);
+          transition:border-color .2s,box-shadow .2s;
+        }
+        .search-box:focus { border-color:#f472b6; box-shadow:0 0 0 4px rgba(244,114,182,.13); }
+        .search-box::placeholder { color:#e9a8c0; }
+
+        .scrollbar-hide::-webkit-scrollbar{display:none}
+        .scrollbar-hide{-ms-overflow-style:none;scrollbar-width:none}
+
+        .svc-grid {
+          display:grid;
+          grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+          gap:18px;
+        }
+        @media(max-width:480px){
+          .svc-grid { grid-template-columns:repeat(2,1fr); gap:11px; }
+          .svc-card  { border-radius:16px; }
+        }
+        @media(max-width:360px){
+          .svc-grid { grid-template-columns:1fr; }
+        }
+      `}</style>
+
+      {/* ── FLOATING ICONS ── */}
+      <div style={{ position:"fixed", inset:0, pointerEvents:"none", zIndex:0, overflow:"hidden" }}>
+        {SALON_ICONS.map((ic, i) => (
+          <span key={i} style={{
+            position:"absolute", top:ic.top, left:ic.left, fontSize:ic.size,
+            opacity:.12,
+            animation:`${["floatA","floatB","floatC"][i%3]} ${ic.dur}s ${ic.delay}s ease-in-out infinite`,
+            userSelect:"none",
+          }}>{ic.icon}</span>
+        ))}
+        {/* subtle rose dot grid */}
+        <div style={{ position:"absolute", inset:0, backgroundImage:"radial-gradient(circle,rgba(244,114,182,.055) 1px,transparent 1px)", backgroundSize:"36px 36px" }} />
+      </div>
+
+      {/* ══ HEADER ══ */}
+      <div style={{ position:"relative", zIndex:1, textAlign:"center", padding:"16px 20px 22px" }}>
+
+        {/* badge */}
+        <div className="pf" style={{ display:"inline-flex", alignItems:"center", gap:7, padding:"5px 14px", borderRadius:999, border:"1px solid rgba(244,114,182,.3)", background:"linear-gradient(90deg,#fce7f3,#fbcfe8,#fce7f3)", boxShadow:"0 2px 12px rgba(190,24,93,.12)", marginBottom:10 }}>
+          <span style={{ width:7, height:7, borderRadius:"50%", background:"#ec4899", display:"inline-block", animation:"pulseDot 1.8s ease-in-out infinite" }} />
+          <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:10, fontWeight:700, letterSpacing:".16em", textTransform:"uppercase", color:"#9d174d" }}>
+            {isAr ? "🏠 نأتي إليك" : "🏠 We Come To You"}
+          </span>
         </div>
 
-        {/* ================= GRID ================= */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-12">
+        {/* heading */}
+        <h1 className="rose-heading pf1" style={{ fontSize:"clamp(1.8rem,4.5vw,2.8rem)", margin:"0 0 8px" }}>
+          {isAr ? "جمالك يبدأ في منزلك" : "Beauty, Delivered To You"}
+        </h1>
 
+        {/* divider */}
+        <div className="pf1" style={{ margin:"0 auto 10px", width:46, height:3, borderRadius:999, background:"linear-gradient(90deg,#f472b6,#fbcfe8,#f472b6)" }} />
+
+        {/* subtitle */}
+        <p className="pf2" style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"clamp(.82rem,1.8vw,.93rem)", color:"#9d4e6a", maxWidth:440, margin:"0 auto", lineHeight:1.65, fontWeight:400 }}>
+          {isAr
+            ? "خدمات تجميل احترافية في راحة منزلك — خبيرات يأتين إليك"
+            : "Professional beauty & wellness services at home — our experts come to you"}
+        </p>
+      </div>
+
+      {/* ══ SEARCH + FILTER ══ */}
+      <div style={{ position:"relative", zIndex:1, maxWidth:1280, margin:"0 auto", padding:"0 16px" }}>
+
+        {/* search */}
+        <div className="pf2" style={{ position:"relative", maxWidth:500, margin:"0 auto 16px" }}>
+          <svg style={{ position:"absolute", left:14, top:"50%", transform:"translateY(-50%)", width:16, height:16 }} fill="none" stroke="#e9a8c0" strokeWidth="2" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+          <input
+            className="search-box" type="text"
+            placeholder={isAr ? "ابحث عن خدمة..." : "Search services..."}
+            value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
+          />
+        </div>
+
+        {/* category pills */}
+        <div className="pf3" style={{ position:"relative", marginBottom:20 }}>
+          <div className="scrollbar-hide" style={{ display:"flex", gap:7, overflowX:"auto", paddingBottom:9, paddingInline:2 }}>
+            <button className={`cat-pill ${selectedCategory==="all" ? "active" : ""}`} onClick={() => setSelectedCategory("all")}>
+              {isAr ? "الكل" : "All"} <span className="cat-count">{services.length}</span>
+            </button>
+            {uniqueCategories.map(cat => {
+              const cnt = services.filter(s => s.category === cat.key).length;
+              return (
+                <button key={cat.key} className={`cat-pill ${selectedCategory===cat.key ? "active" : ""}`} onClick={() => setSelectedCategory(cat.key)}>
+                  {isAr ? cat.nameAr : cat.name} <span className="cat-count">{cnt}</span>
+                </button>
+              );
+            })}
+          </div>
+          <div style={{ position:"absolute", bottom:0, left:0, right:0, height:1.5, background:"linear-gradient(90deg,transparent,rgba(244,114,182,.3),transparent)", pointerEvents:"none" }} />
+        </div>
+
+        {/* count */}
+        {!isLoading && (
+          <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:11.5, color:"#c06080", fontWeight:500, marginBottom:16, letterSpacing:".04em" }}>
+            {filteredServices.length} {isAr ? "خدمة متاحة" : "services available"}
+          </p>
+        )}
+
+        {/* ══ GRID ══ */}
+        <div className="svc-grid" style={{ paddingBottom:72 }}>
           {isLoading ? (
-            [...Array(8)].map((_, i) => <ServiceSkeleton key={i} />)
+            [...Array(8)].map((_,i) => <ServiceSkeleton key={i} />)
           ) : filteredServices.length === 0 ? (
-            <div className="col-span-full text-center py-20">
-              <div className="text-gray-400 text-6xl mb-4">🔍</div>
-              <p className="text-xl font-semibold text-gray-600">
-                {language === "ar"
-                  ? "لم يتم العثور على خدمات"
-                  : "No services found"}
+            <div style={{ gridColumn:"1/-1", textAlign:"center", padding:"72px 0" }}>
+              <div style={{ fontSize:52, marginBottom:14 }}>🔍</div>
+              <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:15, fontWeight:600, color:"#9ca3af" }}>
+                {isAr ? "لم يتم العثور على خدمات" : "No services found"}
               </p>
             </div>
           ) : (
-            filteredServices.map((service) => {
-              const cartQty = getServiceCartQty(service._id);
-              const isMassage = isMassageOrSpa(service);
-
-              const basePrice =
-                isMassage && service.durations?.length
-                  ? service.durations[0].price
-                  : service.price;
+            filteredServices.map((service, idx) => {
+              const cartQty   = getQty(service._id);
+              const massage   = isMspa(service);
+              const basePrice = massage && service.durations?.length ? service.durations[0].price : service.price;
 
               return (
                 <div
-                  key={service._id}
-                  onClick={() => {
-                    if (isMassage) setSelectedService(service);
-                  }}
-                  className="group bg-white rounded-[2rem] overflow-hidden border border-gray-100 hover:border-amber-300 transition-all duration-300 cursor-pointer flex flex-col shadow-sm hover:shadow-xl hover:-translate-y-1"
+                  key={service._id} className="svc-card"
+                  style={{ animationDelay:`${Math.min(idx*55,380)}ms` }}
+                  onClick={() => { if (massage) setSelectedService(service); }}
                 >
-                  {/* IMAGE */}
-                  <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
-                    <img
-                      src={service.imageUrl || service.image}
-                      alt={service.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition duration-700"
-                    />
+                  {/* image */}
+                  <div style={{ aspectRatio:"4/3", overflow:"hidden", background:"#fdf2f8", position:"relative" }}>
+                    <img className="card-img-inner" src={service.imageUrl||service.image} alt={service.name} loading="lazy" />
+
+                    {/* category chip */}
+                    <div style={{ position:"absolute", top:9, left:9, background:"rgba(255,255,255,.92)", backdropFilter:"blur(6px)", borderRadius:999, padding:"3px 10px", fontFamily:"'DM Sans',sans-serif", fontSize:10, fontWeight:700, color:"#9d174d", letterSpacing:".04em", border:"1px solid rgba(244,114,182,.22)" }}>
+                      {isAr ? service.categoryAr : service.category}
+                    </div>
+
+                    {/* qty badge */}
                     {cartQty > 0 && (
-                      <div className="absolute top-3 right-3 bg-gradient-to-br from-amber-400 to-yellow-700 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shadow-lg">
+                      <div style={{ position:"absolute", top:9, right:9, background:"linear-gradient(135deg,#f472b6,#9d174d)", color:"#fff", width:27, height:27, borderRadius:"50%", display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"'DM Sans',sans-serif", fontWeight:800, fontSize:12, boxShadow:"0 2px 10px rgba(190,24,93,.45)" }}>
                         {cartQty}
                       </div>
                     )}
                   </div>
 
-                  {/* CONTENT */}
-                  <div className="p-5 flex flex-col flex-1">
-                    <h3 className="font-bold text-lg text-gray-900 mb-1 line-clamp-1">
-                      {language === "ar"
-                        ? service.nameAr
-                        : service.name}
+                  {/* body */}
+                  <div style={{ padding:"14px 16px 16px", display:"flex", flexDirection:"column", flex:1 }}>
+                    <h3 style={{ fontFamily:"'Playfair Display',Georgia,serif", fontSize:16, fontWeight:700, color:"#1a0a10", margin:"0 0 5px", lineHeight:1.25, overflow:"hidden", display:"-webkit-box", WebkitLineClamp:1, WebkitBoxOrient:"vertical" }}>
+                      {isAr ? service.nameAr : service.name}
                     </h3>
-
-                    <p className="text-xs text-gray-500 mb-4 line-clamp-2 flex-1">
-                      {language === "ar"
-                        ? service.descriptionAr
-                        : service.description}
+                    <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:11.5, color:"#a07080", margin:"0 0 10px", lineHeight:1.55, flex:1, overflow:"hidden", display:"-webkit-box", WebkitLineClamp:2, WebkitBoxOrient:"vertical" }}>
+                      {isAr ? service.descriptionAr : service.description}
                     </p>
 
-                    {/* PRICE */}
-                    <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                    {service.duration && (
+                      <div style={{ display:"inline-flex", alignItems:"center", gap:4, marginBottom:10 }}>
+                        <svg width="11" height="11" fill="none" stroke="#e879a0" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path strokeLinecap="round" d="M12 6v6l4 2"/></svg>
+                        <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:10.5, color:"#e879a0", fontWeight:600 }}>{service.duration} min</span>
+                      </div>
+                    )}
+
+                    {/* price + action */}
+                    <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", borderTop:"1px solid #fce7f3", paddingTop:11, gap:8 }}>
                       <div>
-                        <span className="text-[10px] font-bold text-gray-400 uppercase">
-                          {isMassage ? "Starts from" : "Price"}
+                        <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:9.5, fontWeight:700, color:"#d4859a", textTransform:"uppercase", letterSpacing:".07em", display:"block" }}>
+                          {massage ? (isAr?"يبدأ من":"From") : (isAr?"السعر":"Price")}
                         </span>
-                        <span className="text-xl font-black bg-gradient-to-r from-amber-400 to-yellow-700 bg-clip-text text-transparent block">
-                          {basePrice} <span className="text-xs text-gray-600">AED</span>
+                        <span style={{ fontFamily:"'Playfair Display',serif", fontSize:20, fontWeight:700, color:"#9d174d", lineHeight:1.1 }}>
+                          {basePrice}
+                          <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:10, fontWeight:600, color:"#d4859a", marginLeft:3 }}>AED</span>
                         </span>
                       </div>
 
                       {cartQty === 0 ? (
-                        <button
-                          onClick={(e) =>
-                            isMassage
-                              ? setSelectedService(service)
-                              : handleDirectAdd(e, service)
-                          }
-                          className="px-5 py-2.5 rounded-full bg-gradient-to-br from-amber-400 to-yellow-700 text-white font-bold text-sm hover:shadow-lg active:scale-95 transition-all shadow-md transform hover:scale-105"
-                        >
-                          {isMassage ? "Select" : "Add +"}
+                        <button className="add-btn" onClick={e => massage ? setSelectedService(service) : handleDirectAdd(e, service)}>
+                          {massage ? (isAr?"اختري":"Select") : (isAr?"أضيفي +":"Add +")}
                         </button>
                       ) : (
-                        <div
-                          className="flex items-center bg-gray-100 rounded-full overflow-hidden shadow-md"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <button
-                            onClick={(e) => handleDecrement(e, service._id)}
-                            className="w-9 h-9 flex items-center justify-center bg-white hover:bg-gray-50 active:scale-95 transition-all text-gray-700 font-bold text-lg"
-                          >
-                            −
-                          </button>
-
-                          <span className="px-4 font-bold text-base min-w-[40px] text-center text-gray-900">
-                            {cartQty}
-                          </span>
-
-                          <button
-                            onClick={(e) => handleIncrement(e, service)}
-                            className="w-9 h-9 flex items-center justify-center bg-gradient-to-br from-amber-400 to-yellow-700 text-white hover:shadow-md active:scale-95 transition-all font-bold text-lg"
-                          >
-                            +
-                          </button>
+                        <div className="qty-wrap" onClick={e => e.stopPropagation()}>
+                          <button className="qty-btn" onClick={e => handleDecrement(e, service._id)}>−</button>
+                          <span style={{ fontFamily:"'DM Sans',sans-serif", fontWeight:700, fontSize:13, padding:"0 12px", color:"#1a0a10", minWidth:32, textAlign:"center" }}>{cartQty}</span>
+                          <button className="qty-btn qplus" onClick={e => handleIncrement(e, service)}>+</button>
                         </div>
                       )}
                     </div>
@@ -391,7 +384,6 @@ const handleDecrement = (e, serviceId) => {
         </div>
       </div>
 
-      {/* MODAL */}
       {selectedService && (
         <ServiceDetailsModal
           service={selectedService}
@@ -399,18 +391,7 @@ const handleDecrement = (e, serviceId) => {
           onSuccess={showToast}
         />
       )}
-
-      <style>{`
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-
-        .scrollbar-hide {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-      `}</style>
-    </section>
+    </div>
   );
 };
 
