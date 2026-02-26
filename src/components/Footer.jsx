@@ -1,5 +1,6 @@
 import React from "react";
 import { useLanguage } from "../context/LanguageContext";
+import { Link } from "react-router-dom";
 import logo from "../assets/GMP-Prive-Beauty-and-fitness (2) (1).png";
 
 const Footer = () => {
@@ -61,11 +62,15 @@ const Footer = () => {
                   {t.footer.links.faqs}
                 </a>
               </li>
-              <li>
-                <a href="#policy" className="hover:text-amber-400 transition-all duration-300">
-                  {t.footer.links.privacy}
-                </a>
-              </li>
+             <li>
+  <Link 
+    to="/terms" 
+    className="hover:text-amber-400 transition-all duration-300"
+  >
+    Terms & Conditions
+  </Link>
+</li>
+              
               <li>
                 <a href="#about" className="hover:text-amber-400 transition-all duration-300">
                   {t.footer.links.about}

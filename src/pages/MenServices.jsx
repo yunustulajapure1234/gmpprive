@@ -68,6 +68,7 @@ const MenServices = () => {
 
   const services   = useMemo(() => getServicesByGender("men"), [getServicesByGender]);
   const categories = useMemo(() => getCategories("men"),       [getCategories]);
+  // scrooled 
 useEffect(() => {
   window.scrollTo(0, 0);
 }, []);
@@ -279,7 +280,7 @@ useEffect(() => {
           </svg>
           <input className="search-box" type="text" placeholder={isAr ? "ابحث عن خدمة..." : "Search services..."} value={searchQuery} onChange={e => setSearchQuery(e.target.value)} />
         </div>
-
+        
         {/* ══ CATEGORY CAROUSEL ══ */}
         <div className="pf3" style={{ position:"relative", marginBottom:20 }}>
 

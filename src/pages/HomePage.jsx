@@ -2,6 +2,10 @@ import React, { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
 
+// ✅ Local assets import
+import womenImg from "../assets/female-makeup-in-uae.webp";
+import menImg from "../assets/men-grooming-in-uae.webp";
+
 import Hero from "../components/Hero";
 import About from "../components/About";
 import Testimonials from "../components/Testimonials";
@@ -58,7 +62,7 @@ const HomePage = ({ onBookNowClick }) => {
 
             <div className="w-24 h-1 bg-gradient-to-r from-transparent via-amber-500 to-transparent mx-auto"></div>
 
-            <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto mt-4">
               {language === "ar"
                 ? "خدمات متخصصة للرجال والنساء"
                 : "Specialized services for men and women"}
@@ -73,8 +77,10 @@ const HomePage = ({ onBookNowClick }) => {
               className="group relative overflow-hidden rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 h-80 md:h-96"
             >
               <img
-                src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=1200"
-                alt="Women Services"
+                src={womenImg}
+                alt="Women Salon Services Dubai"
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-pink-900/95 via-pink-700/60 to-transparent" />
@@ -106,8 +112,10 @@ const HomePage = ({ onBookNowClick }) => {
               className="group relative overflow-hidden rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 h-80 md:h-96"
             >
               <img
-                src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=1200"
-                alt="Men Services"
+                src={menImg}
+                alt="Men Grooming Services Dubai"
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-gray-800/60 to-transparent" />

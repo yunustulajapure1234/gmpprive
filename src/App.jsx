@@ -18,7 +18,7 @@ import FloatingButtons from "./components/FloatingButtons";
 import HomePage from "./pages/HomePage";
 import WomenServices from "./pages/WomenServices";
 import MenServices from "./pages/MenServices";
-
+import TermsConditions from "./pages/Terms&Conditions";
 // Admin
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboards";
@@ -96,6 +96,10 @@ function App() {
                         onCartClick={() => setShowCart(true)}
                       />
                     }
+                  />
+                  <Route
+                    path="/terms"
+                    element={<TermsConditions />}
                   />
                   
                 </Route>
