@@ -70,19 +70,23 @@ services: 'Services',
         },
       ],
     },
-       about: {
-      tag: 'Message from the Founders',
-      title: 'Wellness Needed More Than Appointments',
-      subtitle: 'We don\'t send beauticians. We manage your beauty, body & wellness.',
-      paragraphs: [
-        'I watched people book dozens of salon and fitness sessions — yet see no real transformation. Appointments were delivered. Outcomes were not.',
-        'Wellness had become transactional.',
-        'In every serious domain — finance, logistics, healthcare — operating systems replaced marketplaces. Wellness never got one.',
-        'GMP Prive™ was born to be the intelligence layer of personal wellness.',
-        'Starting in Dubai — where luxury meets innovation — we\'re building a system that understands the human body, predicts needs, and delivers real results at home.',
-        'We are not building a services app. We are building the future infrastructure of wellness.'
-      ]
-    },
+     about: {
+  tag: "Message from the Founders",
+  title: "Wellness Needed More Than Appointments – It Needed Real Results",
+  paragraphs: [
+    "We watched people book dozens of salon appointments, beauty sessions, and fitness treatments — yet see no real transformation. Appointments were delivered. Outcomes were not. Wellness had become transactional.",
+    "In every serious domain — finance, logistics, healthcare — operating systems replaced marketplaces. Wellness never got one. Until now.",
+    "GMP Prive™ – The Intelligence Layer of Personal Wellness",
+    "GMP Prive was born to be the intelligence layer of personal wellness — a revolutionary approach to beauty, body, and wellness management that goes beyond traditional salon and spa services.",
+    "Starting in Dubai — where luxury meets innovation — we're building an intelligent wellness system that:",
+    "Understands the human body through expert analysis and personalized consultation",
+    "Predicts wellness needs before clients even realize them",
+    "Delivers real, measurable results at home with professional expertise",
+    "Manages complete wellness journeys rather than isolated appointments",
+    "We Are Not Building a Services App. We Are Building the Future Infrastructure of Wellness.",
+    "Traditional beauty salons, spas, and wellness centers operate as marketplaces — connecting clients with service providers for one-off appointments. GMP Prive operates differently."
+  ]
+},
     testimonials: {
   tag: "Testimonials",
   title: "See the impact we made on our clients",
@@ -235,19 +239,23 @@ banner: {
         },
       ],
     },
-        about: {
-      tag: 'رسالة من المؤسسين',
-      title: 'العافية تحتاج أكثر من المواعيد',
-      subtitle: 'نحن لا نرسل خبراء التجميل. نحن ندير جمالك وجسمك وعافيتك.',
-      paragraphs: [
-        'شاهدت الناس يحجزون عشرات الجلسات في الصالون واللياقة البدنية - ومع ذلك لم يروا أي تحول حقيقي. تم تسليم المواعيد. النتائج لم تكن كذلك.',
-        'أصبحت العافية معاملة تجارية.',
-        'في كل مجال جاد - المالية واللوجستيات والرعاية الصحية - حلت أنظمة التشغيل محل الأسواق. لم تحصل العافية على واحدة أبدًا.',
-        'ولدت GMP Prive™ لتكون طبقة الذكاء للعافية الشخصية.',
-        'بدءًا من دبي - حيث تلتقي الفخامة بالابتكار - نحن نبني نظامًا يفهم جسم الإنسان، ويتنبأ بالاحتياجات، ويقدم نتائج حقيقية في المنزل.',
-        'نحن لا نبني تطبيق خدمات. نحن نبني البنية التحتية المستقبلية للعافية.'
-      ]
-    },
+  about: {
+  tag: "رسالة من المؤسسين",
+  title: "العافية تحتاج إلى أكثر من المواعيد – إنها تحتاج إلى نتائج حقيقية",
+  paragraphs: [
+    "لقد شاهدنا أشخاصًا يحجزون عشرات مواعيد الصالونات وجلسات التجميل واللياقة البدنية — ومع ذلك لم يشهدوا أي تحول حقيقي. تم تنفيذ المواعيد، لكن النتائج لم تتحقق. أصبحت العافية مجرد معاملة تجارية.",
+    "في كل مجال جاد — مثل التمويل والخدمات اللوجستية والرعاية الصحية — استبدلت أنظمة التشغيل نماذج الأسواق. أما العافية، فلم تحصل على نظامها بعد. حتى الآن.",
+    "GMP Prive™ – طبقة الذكاء للعافية الشخصية",
+    "وُلدت GMP Prive لتكون طبقة الذكاء للعافية الشخصية — نهجًا ثوريًا لإدارة الجمال والجسم والعافية يتجاوز خدمات الصالونات ومراكز السبا التقليدية.",
+    "انطلاقًا من دبي — حيث تلتقي الفخامة بالابتكار — نحن نبني نظامًا ذكيًا للعافية يقوم بـ:",
+    "فهم جسم الإنسان من خلال تحليل احترافي واستشارات مخصصة",
+    "التنبؤ باحتياجات العافية قبل أن يدركها العملاء",
+    "تقديم نتائج حقيقية وقابلة للقياس في المنزل بخبرة احترافية",
+    "إدارة رحلة العافية الكاملة بدلاً من مواعيد منفصلة",
+    "نحن لا نبني تطبيق خدمات. نحن نبني البنية التحتية المستقبلية للعافية.",
+    "تعمل الصالونات ومراكز السبا والعافية التقليدية كنماذج سوقية تربط العملاء بمقدمي الخدمات لمواعيد فردية. أما GMP Prive فتعمل بطريقة مختلفة."
+  ]
+},
       testimonials: {
       tag: 'الشهادات',
       title: 'انظر التأثير الذي أحدثناه على عملائنا',

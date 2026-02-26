@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useLanguage } from "../context/LanguageContext";
 import { useBooking } from "../context/BookingContext";
 import { useAdmin } from "../context/AdminContext";
@@ -60,15 +60,35 @@ const MenServices = () => {
   const [selectedService, setSelectedService]   = useState(null);
   const [isLoading, setIsLoading]               = useState(true);
   const [toast, setToast]                       = useState(null);
+  const [canScrollLeft,  setCanScrollLeft]       = useState(false);
+  const [canScrollRight, setCanScrollRight]      = useState(false);
 
+  const pillsRef = useRef(null);
   const isAr = language === "ar";
 
-  const services         = useMemo(() => getServicesByGender("men"), [getServicesByGender]);
-  const categories       = useMemo(() => getCategories("men"),       [getCategories]);
-
+  const services   = useMemo(() => getServicesByGender("men"), [getServicesByGender]);
+  const categories = useMemo(() => getCategories("men"),       [getCategories]);
+useEffect(() => {
+  window.scrollTo(0, 0);
+}, []);
   useEffect(() => {
     if (services.length > 0) { const t = setTimeout(() => setIsLoading(false), 600); return () => clearTimeout(t); }
   }, [services]);
+
+  /* ── carousel scroll detection ── */
+  const checkScroll = () => {
+    const el = pillsRef.current; if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 8);
+    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 8);
+  };
+  useEffect(() => {
+    const el = pillsRef.current; if (!el) return;
+    checkScroll();
+    el.addEventListener("scroll", checkScroll, { passive: true });
+    window.addEventListener("resize", checkScroll);
+    return () => { el.removeEventListener("scroll", checkScroll); window.removeEventListener("resize", checkScroll); };
+  }, [services]);
+  const scrollPills = (dir) => pillsRef.current?.scrollBy({ left: dir * 200, behavior: "smooth" });
 
   const filteredServices = useMemo(() => services.filter(s => {
     const matchCat = selectedCategory === "all" || s.category === selectedCategory;
@@ -152,6 +172,22 @@ const MenServices = () => {
         .cat-count { font-size:10px; font-weight:800; padding:1px 7px; border-radius:999px; background:rgba(255,255,255,.25); }
         .cat-pill:not(.active) .cat-count { background:#fef3c7; color:#b45309; }
 
+        /* ── carousel arrows ── */
+        .pills-arrow {
+          flex-shrink:0; width:32px; height:32px; border-radius:50%;
+          border:1.5px solid rgba(200,150,42,.25);
+          background:rgba(255,255,255,.95); backdrop-filter:blur(8px);
+          box-shadow:0 2px 10px rgba(200,150,42,.15);
+          display:flex; align-items:center; justify-content:center;
+          cursor:pointer; transition:all .22s ease; color:#b45309;
+        }
+        .pills-arrow:hover { background:linear-gradient(135deg,#f59e0b,#92400e); border-color:transparent; color:#fff; box-shadow:0 5px 18px rgba(200,150,42,.42); transform:scale(1.08); }
+        .pills-arrow:disabled { opacity:0; pointer-events:none; }
+
+        .pills-track { display:flex; gap:7px; overflow-x:auto; padding-bottom:9px; padding-inline:6px; }
+        .pills-track::-webkit-scrollbar { display:none; }
+        .pills-track { -ms-overflow-style:none; scrollbar-width:none; }
+
         .svc-card {
           background:#fff; border-radius:22px; overflow:hidden;
           border:1px solid rgba(200,150,42,.1); box-shadow:0 2px 14px rgba(0,0,0,.06);
@@ -191,9 +227,6 @@ const MenServices = () => {
         .search-box:focus { border-color:#f59e0b; box-shadow:0 0 0 4px rgba(245,158,11,.13); }
         .search-box::placeholder { color:#c8b090; }
 
-        .scrollbar-hide::-webkit-scrollbar{display:none}
-        .scrollbar-hide{-ms-overflow-style:none;scrollbar-width:none}
-
         .svc-grid {
           display:grid;
           grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
@@ -208,12 +241,11 @@ const MenServices = () => {
         }
       `}</style>
 
-      {/* ── FLOATING ICONS (fixed, whole page) ── */}
+      {/* ── FLOATING ICONS ── */}
       <div style={{ position:"fixed", inset:0, pointerEvents:"none", zIndex:0, overflow:"hidden" }}>
         {SALON_ICONS.map((ic, i) => (
           <span key={i} style={{
-            position:"absolute", top:ic.top, left:ic.left, fontSize:ic.size,
-            opacity:.13,
+            position:"absolute", top:ic.top, left:ic.left, fontSize:ic.size, opacity:.13,
             animation:`${["floatA","floatB","floatC"][i%3]} ${ic.dur}s ${ic.delay}s ease-in-out infinite`,
             userSelect:"none", filter:"grayscale(15%)",
           }}>{ic.icon}</span>
@@ -221,30 +253,20 @@ const MenServices = () => {
         <div style={{ position:"absolute", inset:0, backgroundImage:"radial-gradient(circle,rgba(200,150,42,.055) 1px,transparent 1px)", backgroundSize:"36px 36px" }} />
       </div>
 
-      {/* ══ HEADER — compact ══ */}
+      {/* ══ HEADER ══ */}
       <div style={{ position:"relative", zIndex:1, textAlign:"center", padding:"16px 20px 22px" }}>
-
-        {/* badge */}
         <div className="pf" style={{ display:"inline-flex", alignItems:"center", gap:7, padding:"5px 14px", borderRadius:999, border:"1px solid rgba(200,150,42,.28)", background:"linear-gradient(90deg,#fef3c7,#fde68a,#fef3c7)", boxShadow:"0 2px 12px rgba(200,150,42,.14)", marginBottom:10 }}>
           <span style={{ width:7, height:7, borderRadius:"50%", background:"#f59e0b", display:"inline-block", animation:"pulseDot 1.8s ease-in-out infinite" }} />
           <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:10, fontWeight:700, letterSpacing:".16em", textTransform:"uppercase", color:"#92400e" }}>
             {isAr ? "🏠 نأتي إليك" : "🏠 We Come To You"}
           </span>
         </div>
-
-        {/* heading */}
         <h1 className="gold-heading pf1" style={{ fontSize:"clamp(1.8rem,4.5vw,2.8rem)", margin:"0 0 8px" }}>
           {isAr ? "صالون فاخر يأتي إليك" : "Luxury Salon, At Your Door"}
         </h1>
-
-        {/* divider */}
         <div className="pf1" style={{ margin:"0 auto 10px", width:46, height:3, borderRadius:999, background:"linear-gradient(90deg,#f59e0b,#fbbf24,#f59e0b)" }} />
-
-        {/* subtitle */}
         <p className="pf2" style={{ fontFamily:"'DM Sans',sans-serif", fontSize:"clamp(.82rem,1.8vw,.93rem)", color:"#7a5c28", maxWidth:440, margin:"0 auto", lineHeight:1.65, fontWeight:400 }}>
-          {isAr
-            ? "تجربة صالون احترافية في راحة منزلك — خبراء يأتون إليك"
-            : "Professional grooming & care, delivered home — your comfort, our craft"}
+          {isAr ? "تجربة صالون احترافية في راحة منزلك — خبراء يأتون إليك" : "Professional grooming & care, delivered home — your comfort, our craft"}
         </p>
       </div>
 
@@ -255,16 +277,24 @@ const MenServices = () => {
           <svg style={{ position:"absolute", left:14, top:"50%", transform:"translateY(-50%)", width:16, height:16 }} fill="none" stroke="#c8a060" strokeWidth="2" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
           </svg>
-          <input
-            className="search-box" type="text"
-            placeholder={isAr ? "ابحث عن خدمة..." : "Search services..."}
-            value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
-          />
+          <input className="search-box" type="text" placeholder={isAr ? "ابحث عن خدمة..." : "Search services..."} value={searchQuery} onChange={e => setSearchQuery(e.target.value)} />
         </div>
 
-        {/* category pills */}
+        {/* ══ CATEGORY CAROUSEL ══ */}
         <div className="pf3" style={{ position:"relative", marginBottom:20 }}>
-          <div className="scrollbar-hide" style={{ display:"flex", gap:7, overflowX:"auto", paddingBottom:9, paddingInline:2 }}>
+
+          {/* left fade + arrow */}
+          <div style={{ position:"absolute", left:0, top:0, bottom:9, width:52, zIndex:2, display:"flex", alignItems:"center", pointerEvents: canScrollLeft ? "auto" : "none" }}>
+            <div style={{ position:"absolute", inset:0, background:"linear-gradient(90deg,#fdf9f3 55%,transparent)", pointerEvents:"none" }} />
+            <button className="pills-arrow" disabled={!canScrollLeft} onClick={() => scrollPills(isAr ? 1 : -1)} style={{ position:"relative", zIndex:3, marginLeft:0 }}>
+              <svg width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"/>
+              </svg>
+            </button>
+          </div>
+
+          {/* scrollable pills */}
+          <div ref={pillsRef} className="pills-track" style={{ paddingInline:"40px" }}>
             <button className={`cat-pill ${selectedCategory==="all" ? "active" : ""}`} onClick={() => setSelectedCategory("all")}>
               {isAr ? "الكل" : "All"} <span className="cat-count">{services.length}</span>
             </button>
@@ -277,6 +307,17 @@ const MenServices = () => {
               );
             })}
           </div>
+
+          {/* right fade + arrow */}
+          <div style={{ position:"absolute", right:0, top:0, bottom:9, width:52, zIndex:2, display:"flex", alignItems:"center", justifyContent:"flex-end", pointerEvents: canScrollRight ? "auto" : "none" }}>
+            <div style={{ position:"absolute", inset:0, background:"linear-gradient(270deg,#fdf9f3 55%,transparent)", pointerEvents:"none" }} />
+            <button className="pills-arrow" disabled={!canScrollRight} onClick={() => scrollPills(isAr ? -1 : 1)} style={{ position:"relative", zIndex:3, marginRight:0 }}>
+              <svg width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
+
           <div style={{ position:"absolute", bottom:0, left:0, right:0, height:1.5, background:"linear-gradient(90deg,transparent,rgba(200,150,42,.28),transparent)", pointerEvents:"none" }} />
         </div>
 
@@ -305,11 +346,7 @@ const MenServices = () => {
               const basePrice = massage && service.durations?.length ? service.durations[0].price : service.price;
 
               return (
-                <div
-                  key={service._id} className="svc-card"
-                  style={{ animationDelay:`${Math.min(idx*55,380)}ms` }}
-                  onClick={() => { if (massage) setSelectedService(service); }}
-                >
+                <div key={service._id} className="svc-card" style={{ animationDelay:`${Math.min(idx*55,380)}ms` }} onClick={() => { if (massage) setSelectedService(service); }}>
                   <div style={{ aspectRatio:"4/3", overflow:"hidden", background:"#f0ebe0", position:"relative" }}>
                     <img className="card-img-inner" src={service.imageUrl||service.image} alt={service.name} loading="lazy" />
                     <div style={{ position:"absolute", top:9, left:9, background:"rgba(255,255,255,.92)", backdropFilter:"blur(6px)", borderRadius:999, padding:"3px 10px", fontFamily:"'DM Sans',sans-serif", fontSize:10, fontWeight:700, color:"#7a4f10", letterSpacing:".04em", border:"1px solid rgba(200,150,42,.18)" }}>
@@ -329,25 +366,21 @@ const MenServices = () => {
                     <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:11.5, color:"#9a8060", margin:"0 0 10px", lineHeight:1.55, flex:1, overflow:"hidden", display:"-webkit-box", WebkitLineClamp:2, WebkitBoxOrient:"vertical" }}>
                       {isAr ? service.descriptionAr : service.description}
                     </p>
-
                     {service.duration && (
                       <div style={{ display:"inline-flex", alignItems:"center", gap:4, marginBottom:10 }}>
                         <svg width="11" height="11" fill="none" stroke="#c8962a" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path strokeLinecap="round" d="M12 6v6l4 2"/></svg>
                         <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:10.5, color:"#c8962a", fontWeight:600 }}>{service.duration} min</span>
                       </div>
                     )}
-
                     <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", borderTop:"1px solid #f3ece0", paddingTop:11, gap:8 }}>
                       <div>
                         <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:9.5, fontWeight:700, color:"#c8a060", textTransform:"uppercase", letterSpacing:".07em", display:"block" }}>
                           {massage ? (isAr?"يبدأ من":"From") : (isAr?"السعر":"Price")}
                         </span>
                         <span style={{ fontFamily:"'Playfair Display',serif", fontSize:20, fontWeight:700, color:"#b45309", lineHeight:1.1 }}>
-                          {basePrice}
-                          <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:10, fontWeight:600, color:"#c8a060", marginLeft:3 }}>AED</span>
+                          {basePrice}<span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:10, fontWeight:600, color:"#c8a060", marginLeft:3 }}>AED</span>
                         </span>
                       </div>
-
                       {qty === 0 ? (
                         <button className="add-btn" onClick={e => massage ? setSelectedService(service) : handleAdd(e, service)}>
                           {massage ? (isAr?"اختر":"Select") : (isAr?"أضف +":"Add +")}
@@ -369,11 +402,7 @@ const MenServices = () => {
       </div>
 
       {selectedService && (
-        <ServiceDetailsModal
-          service={selectedService}
-          onClose={() => setSelectedService(null)}
-          onSuccess={showToast}
-        />
+        <ServiceDetailsModal service={selectedService} onClose={() => setSelectedService(null)} onSuccess={showToast} />
       )}
     </div>
   );

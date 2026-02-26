@@ -61,6 +61,7 @@ function App() {
                   }
                 />
 
+    
                 {/* ================= PUBLIC ================= */}
                 <Route
                   element={
@@ -96,6 +97,7 @@ function App() {
                       />
                     }
                   />
+                  
                 </Route>
 
               </Routes>
