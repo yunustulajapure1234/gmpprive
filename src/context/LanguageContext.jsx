@@ -13,23 +13,21 @@ export const useLanguage = () => {
 export const translations = {
   en: {
     nav: {
-      home: 'Home',
-      about: 'About Us',
-      forWomen: 'For Women',
-      forMen: 'For Men',
-      contact: 'Contact Us',
-   packages: 'Packages',
-services: 'Services',
-
-
+      home: "Home",
+      about: "About Us",
+      forWomen: "For Women",
+      forMen: "For Men",
+      contact: "Contact Us",
+      packages: "Packages",
+      services: "Services",
     },
     banner: {
-  items: [
-    "🎉 Book Now & Get 20% OFF | Limited Time",
-    "⭐ New Luxury Packages Available",
-    "💎 Professional Home Beauty Services"
-  ]
-},
+      items: [
+        "🎉 Book Now & Get 20% OFF | Limited Time",
+        "⭐ New Luxury Packages Available",
+        "💎 Professional Home Beauty Services",
+      ],
+    },
     hero: {
       slides: [
         {
@@ -58,8 +56,7 @@ services: 'Services',
         },
         {
           title: "Personal Fitness Training",
-          description:
-            "Customized weight loss & fitness programs at home.",
+          description: "Customized weight loss & fitness programs at home.",
           cta: "Get Started",
         },
         {
@@ -70,140 +67,165 @@ services: 'Services',
         },
       ],
     },
-     about: {
-  tag: "Message from the Founders",
-  title: "Wellness Needed More Than Appointments – It Needed Real Results",
-  paragraphs: [
-    "We watched people book dozens of salon appointments, beauty sessions, and fitness treatments — yet see no real transformation. Appointments were delivered. Outcomes were not. Wellness had become transactional.",
-    "In every serious domain — finance, logistics, healthcare — operating systems replaced marketplaces. Wellness never got one. Until now.",
-    "GMP Prive™ – The Intelligence Layer of Personal Wellness",
-    "GMP Prive was born to be the intelligence layer of personal wellness — a revolutionary approach to beauty, body, and wellness management that goes beyond traditional salon and spa services.",
-    "Starting in Dubai — where luxury meets innovation — we're building an intelligent wellness system that:",
-    "Understands the human body through expert analysis and personalized consultation",
-    "Predicts wellness needs before clients even realize them",
-    "Delivers real, measurable results at home with professional expertise",
-    "Manages complete wellness journeys rather than isolated appointments",
-    "We Are Not Building a Services App. We Are Building the Future Infrastructure of Wellness.",
-    "Traditional beauty salons, spas, and wellness centers operate as marketplaces — connecting clients with service providers for one-off appointments. GMP Prive operates differently."
-  ]
-},
+    about: {
+      tag: "Message from the Founders",
+      title: "Wellness Needed More Than Appointments – It Needed Real Results",
+      paragraphs: [
+        "We watched people book dozens of salon appointments, beauty sessions, and fitness treatments — yet see no real transformation. Appointments were delivered. Outcomes were not. Wellness had become transactional.",
+        "In every serious domain — finance, logistics, healthcare — operating systems replaced marketplaces. Wellness never got one. Until now.",
+        "GMP Prive™ – The Intelligence Layer of Personal Wellness",
+        "GMP Prive was born to be the intelligence layer of personal wellness — a revolutionary approach to beauty, body, and wellness management that goes beyond traditional salon and spa services.",
+        "Starting in Dubai — where luxury meets innovation — we're building an intelligent wellness system that:",
+        "Understands the human body through expert analysis and personalized consultation",
+        "Predicts wellness needs before clients even realize them",
+        "Delivers real, measurable results at home with professional expertise",
+        "Manages complete wellness journeys rather than isolated appointments",
+        "We Are Not Building a Services App. We Are Building the Future Infrastructure of Wellness.",
+        "Traditional beauty salons, spas, and wellness centers operate as marketplaces — connecting clients with service providers for one-off appointments. GMP Prive operates differently.",
+      ],
+    },
     testimonials: {
-  tag: "Testimonials",
-  title: "See the impact we made on our clients",
-  description: "Real experiences from our happy customers",
-  items: [
-    {
-      name: "Mariana Bohorkez",
-      service: "Hair & Makeup",
-      text: "Amazing experience. The makeup was flawless and hair was exactly how I imagined."
+      tag: "Testimonials",
+      title: "See the impact we made on our clients",
+      description: "Real experiences from our happy customers",
+      items: [
+        {
+          name: "Mariana Bohorkez",
+          service: "Hair & Makeup",
+          text: "Amazing experience. The makeup was flawless and hair was exactly how I imagined.",
+        },
+        {
+          name: "Elena Grigorieva",
+          service: "Hair Coloring",
+          text: "Came for hair coloring and the result exceeded my expectations.",
+        },
+        {
+          name: "Iman Al Ansari",
+          service: "Haircut & Blowdry",
+          text: "Perfect haircut and blowdry. The team understood exactly what I wanted.",
+        },
+      ],
     },
-    {
-      name: "Elena Grigorieva",
-      service: "Hair Coloring",
-      text: "Came for hair coloring and the result exceeded my expectations."
-    },
-    {
-      name: "Iman Al Ansari",
-      service: "Haircut & Blowdry",
-      text: "Perfect haircut and blowdry. The team understood exactly what I wanted."
-    }
-  ]
-},
-policySection: {
-  policyTitle: "OUR POLICY",
-  faqTitle: "FAQS",
-  policies: [
-    {
-      title: "OUR SERVICE GUARANTEE",
-      content:
-        "Every service delivered by GMP Privé is backed by our quality guarantee. If you are not satisfied, we will re-do the service at no charge within 48 hours.",
-    },
-    {
-      title: "REFUNDS",
-      content:
-        "Refunds are available for cancellations made at least 4 hours before the scheduled service time.",
-    },
-    {
-      title: "RESCHEDULE",
-      content:
-        "Please reach out to us on WhatsApp to change the time or date of your service at least 4 hours before the scheduled booking.",
-    },
-    {
-      title: "CANCELLATION",
-      content:
-        "Cancellations made less than 4 hours before the appointment are subject to a 50% cancellation fee.",
-    },
-    {
-      title: "PRIVACY",
-      content:
-        "Your personal information is strictly confidential. We do not share, sell, or distribute your data.",
-    },
-  ],
-  faqs: [
-    {
-      title: "HOW DO I SCHEDULE AN APPOINTMENT?",
-      content:
-        "You can book directly through our website, via WhatsApp, or by calling us.",
-    },
-    {
-      title: "WHAT ARE THE OPERATING HOURS?",
-      content:
-        "We are available 7 days a week from 9:00 AM to 10:00 PM.",
-    },
-    {
-      title: "HOW DO I PAY FOR THE HOME SERVICE?",
-      content:
-        "We accept cash, credit/debit cards, and bank transfers.",
-    },
-  ],
-},
+    policySection: {
+      policyTitle: "OUR POLICY",
+      faqTitle: "FREQUENTLY ASKED QUESTIONS",
 
-contact: {
-      tag: 'Contact Us',
-      description: 'Visit our modern salon for premium services',
-      address: 'Address',
-      addressText: 'Home Massage Services\nAl Barsha Heights, Dubai, UAE',
-      call: 'Call',
-      whatsapp: 'WhatsApp',
-      email: 'Email'
+      policies: [
+        {
+          title: "OUR SERVICE GUARANTEE",
+          content:
+            "GMP Privé delivers professional, hygienic, and premium salon & spa services across the UAE. All professionals are fully trained and vetted. Tools are sanitized before every visit and premium products are used where appropriate. Services are delivered with full discretion and privacy.",
+        },
+        {
+          title: "SATISFACTION WINDOW",
+          content:
+            "If you are not satisfied, you must notify us within 12 hours after service completion. After review, we may offer a corrective session or a service credit valid for 30 days. Cash refunds will not be issued where corrective action is possible.",
+        },
+        {
+          title: "CLIENT RESPONSIBILITY",
+          content:
+            "Clients must disclose allergies, medical conditions, pregnancy, skin sensitivities, or recent surgeries before service. GMP Privé is not responsible for reactions caused by undisclosed conditions.",
+        },
+        {
+          title: "RIGHT TO REFUSE SERVICE",
+          content:
+            "We reserve the right to refuse or discontinue service in case of health risks, unsafe environments, or inappropriate behavior.",
+        },
+        {
+          title: "REFUNDS",
+          content:
+            "Completed or partially completed services are non-refundable. Eligible cancellations are converted into service credits. Subscription fees are non-refundable once activated. Billing errors such as duplicate charges will be refunded within 7–14 business days after verification.",
+        },
+        {
+          title: "RESCHEDULING",
+          content:
+            "Appointments may be rescheduled up to 6 hours prior to service without fee. Late rescheduling within 6 hours may incur a 50 AED fee subject to availability.",
+        },
+        {
+          title: "CANCELLATION POLICY",
+          content:
+            "Cancellations up to 6 hours before service are free. Cancellations within 6 hours are subject to 50% charge. If the therapist has arrived or the service has started, full payment applies.",
+        },
+        {
+          title: "NO-SHOW POLICY",
+          content:
+            "If the client is unavailable 15 minutes past the scheduled time, the booking will be marked as no-show and charged in full.",
+        },
+        {
+          title: "PRIVACY",
+          content:
+            "We collect necessary booking details including name, contact, address and payment confirmation. Payments are processed via secure third parties and card details are never stored. Personal data is never sold or shared except where required under UAE law.",
+        },
+        {
+          title: "LEGAL & LIABILITY",
+          content:
+            "By confirming a booking or making payment, you agree to our terms under UAE law. Our maximum liability is limited to the service amount paid. All disputes are governed by UAE laws.",
+        },
+      ],
+
+      faqs: [
+        {
+          title: "HOW DO I BOOK?",
+          content:
+            "Bookings can be made via our website, WhatsApp, or phone. Confirmation is required to secure the appointment.",
+        },
+        {
+          title: "WHAT ARE YOUR OPERATING HOURS?",
+          content:
+            "We operate daily from 10:00 AM to 10:00 PM. Timings may vary during holidays or peak periods.",
+        },
+        {
+          title: "HOW DO I PAY?",
+          content:
+            "Payments can be made via secure online payment, card, or approved digital transfer. Full advance payment may be required for certain bookings.",
+        },
+      ],
     },
-footer: {
-  brandTag: "Beauty And Fitness",
-  description:
-    "Premium home salon & spa services in Dubai. Experience true luxury and professional care at your doorstep.",
-  quickLinks: "Quick Links",
-  contact: "Contact Us",
-  links: {
-    home: "Home",
-    services: "Services",
-    packages: "Packages",
-    faqs: "FAQs",
-    privacy: "Privacy Policy",
-    about: "About Us",
+
+    contact: {
+      tag: "Contact Us",
+      description: "Visit our modern salon for premium services",
+      address: "Address",
+      addressText: "Home Massage Services\nAl Barsha Heights, Dubai, UAE",
+      call: "Call",
+      whatsapp: "WhatsApp",
+      email: "Email",
+    },
+    footer: {
+      brandTag: "Beauty And Fitness",
+      description:
+        "Premium home salon & spa services in Dubai. Experience true luxury and professional care at your doorstep.",
+      quickLinks: "Quick Links",
+      contact: "Contact Us",
+      links: {
+        home: "Home",
+        services: "Services",
+        packages: "Packages",
+        faqs: "FAQs",
+        privacy: "Privacy Policy",
+        about: "About Us",
+      },
+      rights: "All Rights Reserved.",
+    },
   },
-  rights: "All Rights Reserved.",
-}
 
-  },
-
- ar: {
-  nav: {
-    home: 'الرئيسية',
-    about: 'من نحن',
-    forWomen: 'للنساء',
-    forMen: 'للرجال',
-    contact: 'اتصل بنا',
-    packages: 'الباقات',
-services: 'الخدمات',
-
-  },
-banner: {
-  items: [
-    "🎉 احجز الآن واحصل على خصم 20٪ | لفترة محدودة",
-    "⭐ باقات فاخرة جديدة متاحة",
-    "💎 خدمات تجميل منزلية احترافية"
-  ]
-},
+  ar: {
+    nav: {
+      home: "الرئيسية",
+      about: "من نحن",
+      forWomen: "للنساء",
+      forMen: "للرجال",
+      contact: "اتصل بنا",
+      packages: "الباقات",
+      services: "الخدمات",
+    },
+    banner: {
+      items: [
+        "🎉 احجز الآن واحصل على خصم 20٪ | لفترة محدودة",
+        "⭐ باقات فاخرة جديدة متاحة",
+        "💎 خدمات تجميل منزلية احترافية",
+      ],
+    },
 
     hero: {
       slides: [
@@ -239,132 +261,157 @@ banner: {
         },
       ],
     },
-  about: {
-  tag: "رسالة من المؤسسين",
-  title: "العافية تحتاج إلى أكثر من المواعيد – إنها تحتاج إلى نتائج حقيقية",
-  paragraphs: [
-    "لقد شاهدنا أشخاصًا يحجزون عشرات مواعيد الصالونات وجلسات التجميل واللياقة البدنية — ومع ذلك لم يشهدوا أي تحول حقيقي. تم تنفيذ المواعيد، لكن النتائج لم تتحقق. أصبحت العافية مجرد معاملة تجارية.",
-    "في كل مجال جاد — مثل التمويل والخدمات اللوجستية والرعاية الصحية — استبدلت أنظمة التشغيل نماذج الأسواق. أما العافية، فلم تحصل على نظامها بعد. حتى الآن.",
-    "GMP Prive™ – طبقة الذكاء للعافية الشخصية",
-    "وُلدت GMP Prive لتكون طبقة الذكاء للعافية الشخصية — نهجًا ثوريًا لإدارة الجمال والجسم والعافية يتجاوز خدمات الصالونات ومراكز السبا التقليدية.",
-    "انطلاقًا من دبي — حيث تلتقي الفخامة بالابتكار — نحن نبني نظامًا ذكيًا للعافية يقوم بـ:",
-    "فهم جسم الإنسان من خلال تحليل احترافي واستشارات مخصصة",
-    "التنبؤ باحتياجات العافية قبل أن يدركها العملاء",
-    "تقديم نتائج حقيقية وقابلة للقياس في المنزل بخبرة احترافية",
-    "إدارة رحلة العافية الكاملة بدلاً من مواعيد منفصلة",
-    "نحن لا نبني تطبيق خدمات. نحن نبني البنية التحتية المستقبلية للعافية.",
-    "تعمل الصالونات ومراكز السبا والعافية التقليدية كنماذج سوقية تربط العملاء بمقدمي الخدمات لمواعيد فردية. أما GMP Prive فتعمل بطريقة مختلفة."
-  ]
-},
-      testimonials: {
-      tag: 'الشهادات',
-      title: 'انظر التأثير الذي أحدثناه على عملائنا',
-      description: 'تجارب حقيقية من عملائنا السعداء',
+    about: {
+      tag: "رسالة من المؤسسين",
+      title: "العافية تحتاج إلى أكثر من المواعيد – إنها تحتاج إلى نتائج حقيقية",
+      paragraphs: [
+        "لقد شاهدنا أشخاصًا يحجزون عشرات مواعيد الصالونات وجلسات التجميل واللياقة البدنية — ومع ذلك لم يشهدوا أي تحول حقيقي. تم تنفيذ المواعيد، لكن النتائج لم تتحقق. أصبحت العافية مجرد معاملة تجارية.",
+        "في كل مجال جاد — مثل التمويل والخدمات اللوجستية والرعاية الصحية — استبدلت أنظمة التشغيل نماذج الأسواق. أما العافية، فلم تحصل على نظامها بعد. حتى الآن.",
+        "GMP Prive™ – طبقة الذكاء للعافية الشخصية",
+        "وُلدت GMP Prive لتكون طبقة الذكاء للعافية الشخصية — نهجًا ثوريًا لإدارة الجمال والجسم والعافية يتجاوز خدمات الصالونات ومراكز السبا التقليدية.",
+        "انطلاقًا من دبي — حيث تلتقي الفخامة بالابتكار — نحن نبني نظامًا ذكيًا للعافية يقوم بـ:",
+        "فهم جسم الإنسان من خلال تحليل احترافي واستشارات مخصصة",
+        "التنبؤ باحتياجات العافية قبل أن يدركها العملاء",
+        "تقديم نتائج حقيقية وقابلة للقياس في المنزل بخبرة احترافية",
+        "إدارة رحلة العافية الكاملة بدلاً من مواعيد منفصلة",
+        "نحن لا نبني تطبيق خدمات. نحن نبني البنية التحتية المستقبلية للعافية.",
+        "تعمل الصالونات ومراكز السبا والعافية التقليدية كنماذج سوقية تربط العملاء بمقدمي الخدمات لمواعيد فردية. أما GMP Prive فتعمل بطريقة مختلفة.",
+      ],
+    },
+    testimonials: {
+      tag: "الشهادات",
+      title: "انظر التأثير الذي أحدثناه على عملائنا",
+      description: "تجارب حقيقية من عملائنا السعداء",
       items: [
         {
-          name: 'ماريانا بوهوركيز',
-          service: 'الشعر والمكياج',
-          text: 'تجربة رائعة. كان المكياج جميلًا والشعر تم بالضبط كما تخيلت. ينصح به بشدة!'
+          name: "ماريانا بوهوركيز",
+          service: "الشعر والمكياج",
+          text: "تجربة رائعة. كان المكياج جميلًا والشعر تم بالضبط كما تخيلت. ينصح به بشدة!",
         },
         {
-          name: 'إلينا غريغوريفا',
-          service: 'صبغ الشعر',
-          text: 'جئت هنا لصبغ الشعر والنتيجة كانت تفوق توقعاتي. موظفين محترفين وودودين للغاية.'
+          name: "إلينا غريغوريفا",
+          service: "صبغ الشعر",
+          text: "جئت هنا لصبغ الشعر والنتيجة كانت تفوق توقعاتي. موظفين محترفين وودودين للغاية.",
         },
         {
-          name: 'إيمان الأنصاري',
-          service: 'قص الشعر والتجفيف',
-          text: 'قصة شعر مثالية وتجفيف. فهم الفريق بالضبط ما أردت. بالتأكيد سأعود مرة أخرى.'
-        }
-      ]
+          name: "إيمان الأنصاري",
+          service: "قص الشعر والتجفيف",
+          text: "قصة شعر مثالية وتجفيف. فهم الفريق بالضبط ما أردت. بالتأكيد سأعود مرة أخرى.",
+        },
+      ],
     },
     policySection: {
-  policyTitle: "سياستنا",
-  faqTitle: "الأسئلة الشائعة",
-  policies: [
-    {
-      title: "ضمان الخدمة",
-      content:
-        "كل خدمة مقدمة من GMP Privé مدعومة بضمان الجودة. إذا لم تكن راضيًا، سنعيد تنفيذ الخدمة مجانًا خلال 48 ساعة.",
+      policyTitle: "سياسة الشركة",
+      faqTitle: "الأسئلة الشائعة",
+
+      policies: [
+        {
+          title: "ضمان الخدمة",
+          content:
+            "تقدم GMP Privé خدمات صالون وسبا احترافية وفاخرة وفق أعلى معايير النظافة في جميع أنحاء دولة الإمارات. جميع المختصين مدربون ومعتمدون، ويتم تعقيم الأدوات قبل كل زيارة مع استخدام منتجات عالية الجودة.",
+        },
+        {
+          title: "فترة الرضا عن الخدمة",
+          content:
+            "في حال عدم الرضا، يجب إخطارنا خلال 12 ساعة من انتهاء الخدمة. بعد المراجعة، قد يتم تقديم جلسة تصحيحية أو رصيد خدمة صالح لمدة 30 يومًا. لا يتم إصدار استرداد نقدي إذا كان بالإمكان تصحيح الخدمة.",
+        },
+        {
+          title: "مسؤولية العميل",
+          content:
+            "يجب على العميل الإفصاح عن أي حساسية أو حالات طبية أو حمل أو عمليات جراحية حديثة قبل بدء الخدمة. لا تتحمل الشركة أي مسؤولية عن مضاعفات ناتجة عن عدم الإفصاح.",
+        },
+        {
+          title: "الحق في رفض الخدمة",
+          content:
+            "يحق لنا رفض أو إيقاف الخدمة في حال وجود مخاطر صحية أو بيئة غير آمنة أو سلوك غير لائق.",
+        },
+        {
+          title: "سياسة الاسترداد",
+          content:
+            "الخدمات المنجزة كليًا أو جزئيًا غير قابلة للاسترداد. يتم تحويل الإلغاءات المؤهلة إلى رصيد خدمة. رسوم الاشتراكات غير قابلة للاسترداد بعد التفعيل. يتم معالجة أخطاء الفوترة خلال 7 إلى 14 يوم عمل.",
+        },
+        {
+          title: "إعادة الجدولة",
+          content:
+            "يمكن إعادة جدولة الموعد قبل 6 ساعات دون رسوم. في حال التأخير أقل من 6 ساعات قد يتم فرض رسوم 50 درهم حسب التوفر.",
+        },
+        {
+          title: "سياسة الإلغاء",
+          content:
+            "الإلغاء قبل 6 ساعات مجاني. الإلغاء خلال أقل من 6 ساعات يخضع لرسوم 50٪. في حال وصول المختص أو بدء الخدمة يتم احتساب الرسوم كاملة.",
+        },
+        {
+          title: "سياسة عدم الحضور",
+          content:
+            "في حال عدم حضور العميل خلال 15 دقيقة من وقت الموعد، يتم اعتبار الحجز ملغى مع احتساب كامل الرسوم.",
+        },
+        {
+          title: "الخصوصية",
+          content:
+            "نقوم بجمع بيانات الحجز الأساسية فقط ويتم معالجة المدفوعات عبر جهات آمنة. لا نقوم بتخزين بيانات البطاقات أو مشاركة المعلومات إلا وفقًا للقانون الإماراتي.",
+        },
+        {
+          title: "المسؤولية القانونية",
+          content:
+            "بمجرد تأكيد الحجز أو الدفع، فإنك توافق على الشروط وفق قوانين دولة الإمارات العربية المتحدة. الحد الأقصى للمسؤولية يقتصر على قيمة الخدمة المدفوعة.",
+        },
+      ],
+
+      faqs: [
+        {
+          title: "كيف يمكنني الحجز؟",
+          content:
+            "يمكن الحجز عبر الموقع الإلكتروني أو واتساب أو الاتصال المباشر. يتم تثبيت الحجز بعد التأكيد.",
+        },
+        {
+          title: "ما هي ساعات العمل؟",
+          content:
+            "نعمل يوميًا من الساعة 10 صباحًا حتى 10 مساءً، وقد تختلف المواعيد خلال المواسم المزدحمة.",
+        },
+        {
+          title: "كيف يتم الدفع؟",
+          content:
+            "يتم الدفع عبر وسائل إلكترونية آمنة أو بطاقات الدفع المعتمدة. قد يُطلب الدفع المسبق لبعض الخدمات.",
+        },
+      ],
     },
-    {
-      title: "الاسترداد",
-      content:
-        "يتوفر استرداد المبلغ في حال الإلغاء قبل 4 ساعات على الأقل من موعد الخدمة.",
-    },
-    {
-      title: "إعادة الجدولة",
-      content:
-        "يرجى التواصل معنا عبر واتساب لتغيير وقت أو تاريخ الخدمة قبل 4 ساعات من الموعد.",
-    },
-    {
-      title: "الإلغاء",
-      content:
-        "الإلغاء قبل أقل من 4 ساعات يخضع لرسوم إلغاء بنسبة 50٪.",
-    },
-    {
-      title: "الخصوصية",
-      content:
-        "معلوماتك الشخصية سرية تمامًا. نحن لا نشارك أو نبيع بياناتك.",
-    },
-  ],
-  faqs: [
-    {
-      title: "كيف يمكنني حجز موعد؟",
-      content:
-        "يمكنك الحجز عبر موقعنا الإلكتروني أو واتساب أو الاتصال بنا.",
-    },
-    {
-      title: "ما هي ساعات العمل؟",
-      content:
-        "نحن متاحون 7 أيام في الأسبوع من 9 صباحًا حتى 10 مساءً.",
-    },
-    {
-      title: "كيف أدفع مقابل الخدمة المنزلية؟",
-      content:
-        "نقبل الدفع نقدًا أو عبر البطاقات البنكية أو التحويل البنكي.",
-    },
-  ],
-},
 
     contact: {
-      tag: 'اتصل بنا',
-      description: 'قم بزيارة صالوننا الحديث للحصول على خدمات مميزة',
-      address: 'العنوان',
-      addressText: 'خدمات التدليك المنزلي\nمرتفعات البرشاء، دبي، الإمارات',
-      call: 'اتصل',
-      whatsapp: 'واتساب',
-      email: 'البريد الإلكتروني'
+      tag: "اتصل بنا",
+      description: "قم بزيارة صالوننا الحديث للحصول على خدمات مميزة",
+      address: "العنوان",
+      addressText: "خدمات التدليك المنزلي\nمرتفعات البرشاء، دبي، الإمارات",
+      call: "اتصل",
+      whatsapp: "واتساب",
+      email: "البريد الإلكتروني",
     },
     footer: {
-  brandTag: "صالون وسبا فاخر",
-  description:
-    "خدمات صالون وسبا فاخرة في منزلك. تجربة الفخامة والعناية والكمال.",
-  quickLinks: "روابط سريعة",
-  contact: "اتصل بنا",
-  links: {
-    home: "الرئيسية",
-    services: "الخدمات",
-    packages: "الباقات",
-    faqs: "الأسئلة الشائعة",
-    privacy: "سياسة الخصوصية",
-    about: "من نحن",
-  },
-  rights: "جميع الحقوق محفوظة.",
-}
-
+      brandTag: "صالون وسبا فاخر",
+      description:
+        "خدمات صالون وسبا فاخرة في منزلك. تجربة الفخامة والعناية والكمال.",
+      quickLinks: "روابط سريعة",
+      contact: "اتصل بنا",
+      links: {
+        home: "الرئيسية",
+        services: "الخدمات",
+        packages: "الباقات",
+        faqs: "الأسئلة الشائعة",
+        privacy: "سياسة الخصوصية",
+        about: "من نحن",
+      },
+      rights: "جميع الحقوق محفوظة.",
+    },
   },
 };
 
 export const LanguageProvider = ({ children }) => {
   const [language, setLanguage] = useState("en");
 
- const toggleLanguage = () => {
-  const y = window.scrollY;
-  setLanguage(prev => (prev === "en" ? "ar" : "en"));
-  setTimeout(() => window.scrollTo(0, y), 0);
-};
-
+  const toggleLanguage = () => {
+    const y = window.scrollY;
+    setLanguage((prev) => (prev === "en" ? "ar" : "en"));
+    setTimeout(() => window.scrollTo(0, y), 0);
+  };
 
   const t = translations[language];
 

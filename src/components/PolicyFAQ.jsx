@@ -8,11 +8,14 @@ const AccordionItem = ({
   isOpen,
   onToggle,
   accentColor = false,
+  isRTL = false,
 }) => (
   <div className="border-b border-gray-200 last:border-b-0">
     <button
       onClick={onToggle}
-      className="w-full flex items-center justify-between py-6 text-left group"
+      className={`w-full flex items-center justify-between py-6 group ${
+        isRTL ? "text-right" : "text-left"
+      }`}
     >
       <span
         className={`text-sm font-semibold tracking-widest uppercase transition-colors duration-200 ${
@@ -28,7 +31,9 @@ const AccordionItem = ({
       </span>
 
       <span
-        className={`flex-shrink-0 ml-4 w-7 h-7 flex items-center justify-center rounded-full border transition-all duration-300 ${
+        className={`flex-shrink-0 ${
+          isRTL ? "mr-4" : "ml-4"
+        } w-7 h-7 flex items-center justify-center rounded-full border transition-all duration-300 ${
           isOpen
             ? "bg-amber-500 border-amber-500 text-white rotate-45"
             : "border-gray-300 text-gray-400 group-hover:border-amber-400 group-hover:text-amber-500"
@@ -53,12 +58,14 @@ const AccordionItem = ({
     <div
       className="overflow-hidden transition-all duration-300 ease-in-out"
       style={{
-        maxHeight: isOpen ? "400px" : "0px",
+        maxHeight: isOpen ? "500px" : "0px",
         opacity: isOpen ? 1 : 0,
       }}
     >
       <p
-        className="pb-6 text-sm text-gray-600 leading-relaxed pr-8"
+        className={`pb-6 text-sm text-gray-600 leading-relaxed ${
+          isRTL ? "pl-8 text-right" : "pr-8 text-left"
+        }`}
         style={{ fontFamily: "Inter, sans-serif" }}
       >
         {content}
@@ -69,13 +76,14 @@ const AccordionItem = ({
 
 /* ── Main Component ── */
 const PolicyFAQ = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [openPolicy, setOpenPolicy] = useState(null);
   const [openFaq, setOpenFaq] = useState(null);
 
-  // 🔥 NOW DATA COMES FROM TRANSLATIONS
   const policies = t.policySection?.policies || [];
   const faqs = t.policySection?.faqs || [];
+
+  const isRTL = language === "ar";
 
   return (
     <section
@@ -88,12 +96,19 @@ const PolicyFAQ = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-3xl shadow-xl p-10 md:p-16">
-          <div className="grid md:grid-cols-2 gap-12 md:divide-x md:divide-gray-200">
-            
+          <div
+            className={`grid md:grid-cols-2 gap-12 ${
+              isRTL
+                ? "md:divide-x-reverse md:divide-gray-200"
+                : "md:divide-x md:divide-gray-200"
+            }`}
+          >
             {/* LEFT - POLICY */}
-            <div className="md:pr-12">
+            <div className={isRTL ? "md:pl-12" : "md:pr-12"}>
               <h2
-                className="text-2xl font-bold mb-10"
+                className={`text-2xl font-bold mb-10 ${
+                  isRTL ? "text-right" : "text-left"
+                }`}
                 style={{ fontFamily: "Playfair Display, serif" }}
               >
                 {t.policySection?.policyTitle}
@@ -108,14 +123,17 @@ const PolicyFAQ = () => {
                   onToggle={() =>
                     setOpenPolicy(openPolicy === i ? null : i)
                   }
+                  isRTL={isRTL}
                 />
               ))}
             </div>
 
             {/* RIGHT - FAQ */}
-            <div className="md:pl-12">
+            <div className={isRTL ? "md:pr-12" : "md:pl-12"}>
               <h2
-                className="text-2xl font-bold mb-10"
+                className={`text-2xl font-bold mb-10 ${
+                  isRTL ? "text-right" : "text-left"
+                }`}
                 style={{ fontFamily: "Playfair Display, serif" }}
               >
                 {t.policySection?.faqTitle}
@@ -131,10 +149,10 @@ const PolicyFAQ = () => {
                     setOpenFaq(openFaq === i ? null : i)
                   }
                   accentColor
+                  isRTL={isRTL}
                 />
               ))}
             </div>
-
           </div>
         </div>
       </div>
