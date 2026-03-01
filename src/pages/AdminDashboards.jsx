@@ -9,10 +9,11 @@ import ServiceForm  from "../components/admin/ServiceForm";
 import ServiceList  from "../components/admin/ServiceList";
 import PackageForm  from "../components/admin/PackageForm";
 import PackageList  from "../components/admin/PackageList";
-import InventoryTab from "../components/admin/InventoryTab";
-import StaffTab     from "../components/admin/StaffTab";
+import InventoryTab   from "../components/admin/InventoryTab";
+import StaffTab       from "../components/admin/StaffTab";
+import MembershipTab  from "../components/admin/MembershipTab";
 
-const TABS = ["dashboard", "women", "men", "packages", "bookings", "inventory", "staff"];
+const TABS = ["dashboard", "women", "men", "packages", "bookings", "inventory", "staff", "membership"];
 
 const todayStr = () => new Date().toISOString().split("T")[0];
 
@@ -296,7 +297,7 @@ const AdminDashboard = () => {
       {/* ── HEADER ── */}
       <header className="bg-gray-900 border-b border-amber-500/20 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-3 h-14 flex justify-between items-center">
-          <h1 className="text-lg font-bold text-amber-500">GMP Prive</h1>
+          <h1 className="text-lg font-bold text-amber-500">GMP Privé</h1>
           <div className="flex items-center gap-2">
             {totalAlerts > 0 && (
               <button onClick={() => setActiveTab("inventory")}
@@ -526,6 +527,12 @@ const AdminDashboard = () => {
         {activeTab === "staff" && (
           <><h2 className="text-lg font-bold text-amber-400 mb-4">Staff</h2>
           <StaffTab onManualBookingAdded={loadManualBookings} /></>
+        )}
+
+        {/* ━━━━━━━━━━ MEMBERSHIP ━━━━━━━━━━ */}
+        {activeTab === "membership" && (
+          <><h2 className="text-lg font-bold text-amber-400 mb-4">💎 Memberships</h2>
+          <MembershipTab /></>
         )}
       </div>
 
