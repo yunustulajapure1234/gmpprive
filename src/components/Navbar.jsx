@@ -45,7 +45,6 @@ const Navbar = ({ onCartClick }) => {
       {showBanner && (
         <div className="fixed top-0 left-0 right-0 z-[30] bg-gradient-to-br from-amber-400 to-yellow-700 text-white overflow-hidden shadow-lg">
           <div className="relative flex items-center h-10">
-
             {/* Close Button */}
             <button
               onClick={() => setShowBanner(false)}
@@ -56,14 +55,22 @@ const Navbar = ({ onCartClick }) => {
 
             {/* Marquee */}
             <div className="marquee-container w-full">
-              <div className={`marquee-content ${language === "ar" ? "reverse" : ""}`}>
+              <div
+                className={`marquee-content ${language === "ar" ? "reverse" : ""}`}
+              >
                 {t?.banner?.items?.map((item, index) => (
-                  <span key={index} className="px-8 text-sm font-semibold whitespace-nowrap">
+                  <span
+                    key={index}
+                    className="px-8 text-sm font-semibold whitespace-nowrap"
+                  >
                     {item}
                   </span>
                 ))}
                 {t?.banner?.items?.map((item, index) => (
-                  <span key={"dup-" + index} className="px-8 text-sm font-semibold whitespace-nowrap">
+                  <span
+                    key={"dup-" + index}
+                    className="px-8 text-sm font-semibold whitespace-nowrap"
+                  >
                     {item}
                   </span>
                 ))}
@@ -74,72 +81,90 @@ const Navbar = ({ onCartClick }) => {
       )}
 
       {/* ================= MAIN NAVBAR ================= */}
-      <nav
-        className={`fixed left-0 right-0 z-50 transition-all duration-300 ${
-          showBanner ? "top-10" : "top-0"
-        } ${
-          scrolled
-            ? "bg-black/95 backdrop-blur-md shadow-2xl"
-            : "bg-transparent backdrop-blur-sm"
+        <nav
+  dir={language === "ar" ? "rtl" : "ltr"}
+  className={`fixed left-0 right-0 z-50 transition-all duration-300 ${
+    showBanner ? "top-10" : "top-0"
+  } ${
+    scrolled
+      ? "bg-black/95 backdrop-blur-md shadow-2xl"
+      : "bg-transparent backdrop-blur-sm"
+  }`}
+>
+  <div className="max-w-7xl mx-auto px-4">
+    <div className="flex items-center justify-between h-16">
+
+      {/* LOGO */}
+      <button
+        onClick={() => navigate("/")}
+        className={`flex items-center ${
+          language === "ar" ? "space-x-reverse space-x-3" : "space-x-3"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
+        <img
+          src={logo}
+          alt="GMP Privé"
+          className="h-14 w-auto object-contain"
+        />
+      </button>
 
-            {/* LOGO */}
-            <button onClick={() => navigate("/")} className="flex items-center space-x-3">
-              <img src={logo} alt="GMP Privé" className="h-14 w-auto object-contain" />
-            </button>
+      {/* ================= DESKTOP MENU ================= */}
+      <div
+        className={`hidden md:flex items-center ${
+          language === "ar"
+            ? "space-x-reverse space-x-8"
+            : "space-x-8"
+        }`}
+      >
+        <button onClick={() => navigate("/")} className={`${textColor} ${hoverColor} font-semibold`}>
+          {t.nav.home}
+        </button>
 
-            {/* ================= DESKTOP MENU ================= */}
-            <div className="hidden md:flex items-center space-x-8">
+        <button onClick={() => goToSection("about")} className={`${textColor} ${hoverColor} font-semibold`}>
+          {t.nav.about}
+        </button>
 
-              <button onClick={() => navigate("/")} className={`${textColor} ${hoverColor} font-semibold`}>
-                {t.nav.home}
-              </button>
+        <button onClick={() => goToSection("packages")} className={`${textColor} ${hoverColor} font-semibold`}>
+          {t.nav.packages}
+        </button>
 
-              <button onClick={() => goToSection("about")} className={`${textColor} ${hoverColor} font-semibold`}>
-                {t.nav.about}
-              </button>
+        <button onClick={() => goToSection("services")} className={`${textColor} ${hoverColor} font-semibold`}>
+          {t.nav.services}
+        </button>
 
-              <button onClick={() => goToSection("packages")} className={`${textColor} ${hoverColor} font-semibold`}>
-                {t.nav.packages || "Packages"}
-              </button>
+        <button onClick={() => navigate("/membership")} className={`${textColor} ${hoverColor} font-semibold`}>
+          {t.nav.membership}
+        </button>
 
-              <button onClick={() => goToSection("services")} className={`${textColor} ${hoverColor} font-semibold`}>
-                {t.nav.services || "Services"}
-              </button>
+        <button onClick={() => goToSection("contact")} className={`${textColor} ${hoverColor} font-semibold`}>
+          {t.nav.contact}
+        </button>
 
-              <button onClick={() => goToSection("contact")} className={`${textColor} ${hoverColor} font-semibold`}>
-                {t.nav.contact}
-              </button>
+        {/* LANGUAGE */}
+        <button
+          onClick={toggleLanguage}
+          className="px-4 py-2 rounded-full bg-white/90 hover:bg-white text-gray-800 font-semibold transition-all hover:scale-105"
+        >
+          {language === "en" ? "العربية" : "English"}
+        </button>
 
-              {/* LANGUAGE */}
-              <button
-                onClick={toggleLanguage}
-                className="px-4 py-2 rounded-full bg-white/90 hover:bg-white text-gray-800 font-semibold transition-all hover:scale-105"
-              >
-                {language === "en" ? "العربية" : "English"}
-              </button>
-
-              {/* CART */}
-              <button
-                type="button"
-                onClick={onCartClick}
-                className="relative px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-full hover:scale-105 transition-all shadow-md"
-              >
-                🛒
-                {getCartCount() > 0 && (
-                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-xs font-bold rounded-full flex items-center justify-center animate-pulse">
-                    {getCartCount()}
-                  </span>
-                )}
-              </button>
-            </div>
+        {/* CART */}
+        <button
+          type="button"
+          onClick={onCartClick}
+          className="relative px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-full hover:scale-105 transition-all shadow-md"
+        >
+          🛒
+          {getCartCount() > 0 && (
+            <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-xs font-bold rounded-full flex items-center justify-center animate-pulse">
+              {getCartCount()}
+            </span>
+          )}
+        </button>
+      </div>
 
             {/* ================= MOBILE ================= */}
             <div className="md:hidden flex items-center gap-2">
-
               <button
                 onClick={toggleLanguage}
                 className="px-3 py-2 bg-white rounded-lg text-sm font-semibold"
@@ -172,27 +197,49 @@ const Navbar = ({ onCartClick }) => {
           {/* ================= MOBILE MENU ================= */}
           {mobileOpen && (
             <div className="md:hidden pb-4 space-y-3 bg-black/90 backdrop-blur-md rounded-b-xl -mx-4 px-6">
-
-              <button onClick={() => navigate("/")} className="block py-2 text-white font-semibold">
+              <button
+                onClick={() => navigate("/")}
+                className="block py-2 text-white font-semibold"
+              >
                 {t.nav.home}
               </button>
 
-              <button onClick={() => goToSection("about")} className="block py-2 text-white font-semibold">
+              <button
+                onClick={() => goToSection("about")}
+                className="block py-2 text-white font-semibold"
+              >
                 {t.nav.about}
               </button>
 
-              <button onClick={() => goToSection("packages")} className="block py-2 text-white font-semibold">
+              <button
+                onClick={() => goToSection("packages")}
+                className="block py-2 text-white font-semibold"
+              >
                 {t.nav.packages || "Packages"}
               </button>
 
-              <button onClick={() => goToSection("services")} className="block py-2 text-white font-semibold">
+              <button
+                onClick={() => goToSection("services")}
+                className="block py-2 text-white font-semibold"
+              >
                 {t.nav.services || "Services"}
               </button>
-
-              <button onClick={() => goToSection("contact")} className="block py-2 text-white font-semibold">
-                {t.nav.contact}
+              <button
+                onClick={() => {
+                  setMobileOpen(false);
+                  navigate("/membership");
+                }}
+                className="block py-2 text-white font-semibold"
+              >
+                {t.nav.membership || "Membership"}
               </button>
 
+              <button
+                onClick={() => goToSection("contact")}
+                className="block py-2 text-white font-semibold"
+              >
+                {t.nav.contact}
+              </button>
             </div>
           )}
         </div>

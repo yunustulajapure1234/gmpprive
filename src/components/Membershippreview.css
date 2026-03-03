@@ -1,0 +1,308 @@
+/* ══════════════════════════════════════
+   MembershipPreview.css
+   Lightweight — landing pe sirf cards
+   Heavy stuff /membership page pe hai
+══════════════════════════════════════ */
+
+.mp-section {
+  background: #080808;
+  padding: 80px 0 72px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.mp-visible { opacity: 1; transform: translateY(0); }
+
+.mp-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Header */
+.mp-header { text-align: center; margin-bottom: 48px; }
+
+.mp-eyebrow {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: #d97706;
+  margin-bottom: 14px;
+}
+.mp-title {
+  font-size: clamp(2rem, 4.5vw, 3rem);
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+}
+.mp-gold {
+  background: linear-gradient(135deg, #d97706, #ca8a04);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.mp-sub {
+  font-size: 15px;
+  color: #9ca3af;
+  max-width: 420px;
+  margin: 0 auto;
+  line-height: 1.65;
+}
+
+/* Cards grid */
+.mp-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 32px;
+}
+@media (max-width: 640px) {
+  .mp-cards { grid-template-columns: 1fr; }
+}
+
+/* Card base */
+.mp-card {
+  position: relative;
+  background: #111;
+  border-radius: 18px;
+  padding: 28px 24px 24px;
+  border: 1px solid rgba(255,255,255,0.07);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.25s ease;
+}
+.mp-visible .mp-card {
+  opacity: 1;
+  transform: translateY(0);
+}
+.mp-card:hover {
+  box-shadow: 0 16px 48px rgba(0,0,0,0.45);
+  transform: translateY(-3px);
+}
+
+/* Tier colors */
+.mp-card-gold  { border-color: rgba(217,119,6,0.2); }
+.mp-card-gold  .mp-glow-bar { background: linear-gradient(90deg, transparent, #d97706, transparent); }
+.mp-card-gold  .mp-tier-label { color: #d97706; }
+.mp-card-gold  .mp-currency, .mp-card-gold .mp-amount { color: #d97706; }
+.mp-card-gold  .mp-pill-tier { background: rgba(217,119,6,0.12); color: #d97706; border-color: rgba(217,119,6,0.25); }
+.mp-card-gold  .mp-btn { background: linear-gradient(135deg, #d97706, #ca8a04); color: #fff; }
+
+.mp-card-purple { border-color: rgba(147,51,234,0.25); background: linear-gradient(145deg, #111 0%, #110d18 100%); }
+.mp-card-purple .mp-glow-bar { background: linear-gradient(90deg, transparent, #9333ea, transparent); }
+.mp-card-purple .mp-tier-label { color: #a855f7; }
+.mp-card-purple .mp-currency, .mp-card-purple .mp-amount { color: #a855f7; }
+.mp-card-purple .mp-pill-tier { background: rgba(147,51,234,0.12); color: #a855f7; border-color: rgba(147,51,234,0.25); }
+.mp-card-purple .mp-btn { background: linear-gradient(135deg, #9333ea, #7c3aed); color: #fff; }
+/* ========================= */
+/* TIER 3 - ROYAL BLUE */
+/* ========================= */
+.mp-card-blue {
+  border-color: rgba(59,130,246,0.25);
+  background: linear-gradient(145deg, #111 0%, #0f172a 100%);
+}
+
+.mp-card-blue .mp-glow-bar {
+  background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+}
+
+.mp-card-blue .mp-tier-label {
+  color: #3b82f6;
+}
+
+.mp-card-blue .mp-currency,
+.mp-card-blue .mp-amount {
+  color: #3b82f6;
+}
+
+.mp-card-blue .mp-pill-tier {
+  background: rgba(59,130,246,0.12);
+  color: #3b82f6;
+  border-color: rgba(59,130,246,0.25);
+}
+
+.mp-card-blue .mp-btn {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: #fff;
+}
+
+
+/* ========================= */
+/* TIER 4 - EMERALD LUXURY */
+/* ========================= */
+.mp-card-emerald {
+  border-color: rgba(16,185,129,0.25);
+  background: linear-gradient(145deg, #111 0%, #0d1f18 100%);
+}
+
+.mp-card-emerald .mp-glow-bar {
+  background: linear-gradient(90deg, transparent, #10b981, transparent);
+}
+
+.mp-card-emerald .mp-tier-label {
+  color: #10b981;
+}
+
+.mp-card-emerald .mp-currency,
+.mp-card-emerald .mp-amount {
+  color: #10b981;
+}
+
+.mp-card-emerald .mp-pill-tier {
+  background: rgba(16,185,129,0.12);
+  color: #10b981;
+  border-color: rgba(16,185,129,0.25);
+}
+
+.mp-card-emerald .mp-btn {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff;
+}
+/* Glow top bar */
+.mp-glow-bar {
+  position: absolute;
+  top: 0; left: 15%; right: 15%;
+  height: 1.5px;
+  border-radius: 0 0 3px 3px;
+}
+
+/* Popular badge */
+.mp-popular {
+  position: absolute;
+  top: 16px; right: 16px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: #fff;
+  background: linear-gradient(135deg, #9333ea, #7c3aed);
+  padding: 3px 10px;
+  border-radius: 100px;
+}
+
+/* Tier label */
+.mp-tier-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  margin-bottom: 6px;
+}
+
+/* Plan name */
+.mp-plan-name {
+  font-size: 18px;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 16px;
+  line-height: 1.25;
+}
+
+/* Price */
+.mp-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  margin-bottom: 14px;
+}
+.mp-currency { font-size: 14px; font-weight: 700; }
+.mp-amount   { font-size: 42px; font-weight: 900; color: #fff; line-height: 1; letter-spacing: -0.03em; }
+.mp-per      { font-size: 13px; color: #6b7280; align-self: flex-end; margin-bottom: 3px; }
+
+/* Pills */
+.mp-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.mp-pill {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 100px;
+  border: 1px solid transparent;
+}
+.mp-pill-green {
+  background: rgba(74,222,128,0.1);
+  color: #4ade80;
+  border-color: rgba(74,222,128,0.2);
+}
+
+/* Hint */
+.mp-hint {
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 20px;
+}
+
+/* CTA button */
+.mp-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: filter 0.2s ease, transform 0.2s ease;
+}
+.mp-btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
+.mp-arrow { font-size: 16px; transition: transform 0.2s ease; }
+.mp-btn:hover .mp-arrow { transform: translateX(3px); }
+
+/* Bottom CTA */
+.mp-bottom { text-align: center; }
+.mp-all-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 28px;
+  background: transparent;
+  border: 1px solid rgba(217,119,6,0.35);
+  color: #d97706;
+  font-size: 13.5px;
+  font-weight: 700;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.mp-all-btn:hover {
+  background: rgba(217,119,6,0.08);
+  border-color: rgba(217,119,6,0.6);
+  transform: translateY(-2px);
+}
+
+/* ── Skeleton loader ── */
+.mp-skeleton { cursor: default; pointer-events: none; }
+.mp-skeleton:hover { transform: none; box-shadow: none; }
+
+.mp-sk-line {
+  height: 12px;
+  background: linear-gradient(90deg, #1a1a1a 25%, #222 50%, #1a1a1a 75%);
+  background-size: 200% 100%;
+  animation: mp-shimmer 1.4s infinite;
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+.mp-sk-short  { width: 40%; }
+.mp-sk-long   { width: 70%; height: 16px; }
+.mp-sk-price  { width: 50%; height: 40px; margin-bottom: 14px; border-radius: 8px;
+  background: linear-gradient(90deg, #1a1a1a 25%, #222 50%, #1a1a1a 75%);
+  background-size: 200% 100%;
+  animation: mp-shimmer 1.4s infinite;
+}
+.mp-sk-btn    { height: 40px; border-radius: 10px; margin-top: 8px;
+  background: linear-gradient(90deg, #1a1a1a 25%, #222 50%, #1a1a1a 75%);
+  background-size: 200% 100%;
+  animation: mp-shimmer 1.4s infinite;
+}
+@keyframes mp-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

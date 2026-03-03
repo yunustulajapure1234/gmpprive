@@ -136,7 +136,13 @@ const ComboPackages = () => {
           >
             {isAr ? "باقاتنا الفاخرة" : "Our Luxury Packages"}
           </h2>
+          
           <div className="w-24 h-1 bg-gradient-to-r from-transparent via-amber-500 to-transparent mx-auto"></div>
+          <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto mt-4">
+              {language === "ar"
+                ? "خدمات متخصصة للرجال والنساء"
+                : "Specialized services for men and women"}
+            </p>
         </div>
 
         {/* GRID - Compact Design */}

@@ -1,0 +1,349 @@
+/* ═══════════════════════════════════════
+   Footer.css — GMP Privé
+   Gold: #d97706 → #ca8a04 (amber-600 to yellow-600)
+═══════════════════════════════════════ */
+
+/* ── CSS Variables ── */
+:root {
+  --gold-1: #d97706;   /* amber-600 */
+  --gold-2: #ca8a04;   /* yellow-600 */
+  --gold-mid: #e09112;
+  --gold-glow: rgba(217, 119, 6, 0.25);
+  --gold-glow-strong: rgba(217, 119, 6, 0.4);
+  --gold-text: linear-gradient(to right, #d97706, #ca8a04);
+}
+
+/* ── Root ── */
+.footer-root {
+  position: relative;
+  background: linear-gradient(165deg, #0a0a0a 0%, #111111 40%, #0d0800 100%);
+  color: white;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.footer-visible {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* ── Decorative top line ── */
+.footer-top-line {
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, var(--gold-1) 30%, var(--gold-2) 50%, var(--gold-1) 70%, transparent 100%);
+  position: relative;
+}
+.footer-top-line::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: inherit;
+  filter: blur(6px);
+  opacity: 0.5;
+}
+
+/* ── Ambient orbs ── */
+.footer-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+}
+.footer-orb-1 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(217,119,6,0.08) 0%, transparent 70%);
+  top: -100px;
+  left: -100px;
+}
+.footer-orb-2 {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(202,138,4,0.06) 0%, transparent 70%);
+  bottom: 0;
+  right: 10%;
+}
+
+/* ── Inner container ── */
+.footer-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 56px 24px 32px;
+}
+
+/* ── Grid ── */
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 48px;
+}
+@media (max-width: 900px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 36px;
+  }
+  .footer-brand {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 560px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+/* ── Brand col ── */
+.footer-logo-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: inline-block;
+  margin-bottom: 12px;
+  transition: opacity 0.2s ease;
+}
+.footer-logo-btn:hover { opacity: 0.85; }
+.footer-logo { height: 60px; width: auto; object-fit: contain; }
+
+.footer-tagline {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  background: var(--gold-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+}
+.footer-desc {
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: #9ca3af;
+  max-width: 320px;
+  margin-bottom: 24px;
+}
+
+/* ── Social pills ── */
+.footer-socials {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.social-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 100px;
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: all 0.25s ease;
+}
+.social-wa {
+  background: rgba(37, 211, 102, 0.12);
+  color: #4ade80;
+  border-color: rgba(37, 211, 102, 0.25);
+}
+.social-wa:hover {
+  background: rgba(37, 211, 102, 0.22);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.2);
+}
+.social-ig {
+  background: rgba(217, 119, 6, 0.12);
+  color: var(--gold-1);
+  border-color: rgba(217, 119, 6, 0.25);
+}
+.social-ig:hover {
+  background: rgba(217, 119, 6, 0.22);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px var(--gold-glow);
+}
+
+/* ── Column title ── */
+.footer-col-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: var(--gold-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 20px;
+}
+.footer-title-line {
+  display: inline-block;
+  width: 24px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold-1), var(--gold-2));
+  border-radius: 2px;
+  flex-shrink: 0;
+  /* gradient text breaks bg on span — reset for this child */
+  -webkit-text-fill-color: initial;
+}
+
+/* ── Links ── */
+.footer-links-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.footer-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #9ca3af;
+  font-size: 13.5px;
+  text-decoration: none;
+  padding: 0;
+  transition: color 0.2s ease, gap 0.2s ease;
+}
+.footer-link:hover { color: var(--gold-1); gap: 10px; }
+
+.footer-link-arrow {
+  color: var(--gold-1);
+  font-size: 16px;
+  line-height: 1;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.footer-link:hover .footer-link-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ── Contact list ── */
+.footer-contact-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.footer-contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13.5px;
+  color: #9ca3af;
+  line-height: 1.5;
+}
+.contact-icon { font-size: 15px; line-height: 1.5; flex-shrink: 0; }
+.footer-email { word-break: break-all; }
+
+/* ── Book CTA button ── */
+.footer-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 22px;
+  background: linear-gradient(135deg, var(--gold-1), var(--gold-2));
+  color: #000;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  border: none;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 20px var(--gold-glow);
+}
+.footer-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px var(--gold-glow-strong);
+  background: linear-gradient(135deg, var(--gold-mid), var(--gold-1));
+}
+.footer-cta-arrow {
+  font-size: 16px;
+  transition: transform 0.2s ease;
+}
+.footer-cta:hover .footer-cta-arrow { transform: translateX(4px); }
+
+/* ── Ornament divider ── */
+.footer-divider { margin-bottom: 28px; }
+.footer-divider-ornament {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+}
+.ornament-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--gold-1);
+  opacity: 0.4;
+}
+.ornament-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(217,119,6,0.3), transparent);
+  max-width: 200px;
+}
+.ornament-diamond {
+  color: var(--gold-1);
+  font-size: 10px;
+  opacity: 0.8;
+}
+
+/* ── Bottom bar ── */
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.footer-copy {
+  font-size: 12.5px;
+  color: #6b7280;
+}
+.footer-brand-name {
+  background: var(--gold-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+}
+.footer-made {
+  font-size: 12.5px;
+  color: #6b7280;
+}
+
+/* ── Heartbeat ── */
+.heart {
+  color: #f87171;
+  display: inline-block;
+  animation: heartbeat 1.8s ease infinite;
+}
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1);    }
+  15%       { transform: scale(1.25); }
+  30%       { transform: scale(1);    }
+  45%       { transform: scale(1.15); }
+  60%       { transform: scale(1);    }
+}

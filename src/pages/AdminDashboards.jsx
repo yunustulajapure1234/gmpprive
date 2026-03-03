@@ -297,7 +297,7 @@ const AdminDashboard = () => {
       {/* ── HEADER ── */}
       <header className="bg-gray-900 border-b border-amber-500/20 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-3 h-14 flex justify-between items-center">
-          <h1 className="text-lg font-bold text-amber-500">GMP Privé</h1>
+          <h1 className="text-lg font-bold text-amber-500">GMP Prive</h1>
           <div className="flex items-center gap-2">
             {totalAlerts > 0 && (
               <button onClick={() => setActiveTab("inventory")}

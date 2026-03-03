@@ -19,6 +19,7 @@ import HomePage from "./pages/HomePage";
 import WomenServices from "./pages/WomenServices";
 import MenServices from "./pages/MenServices";
 import TermsConditions from "./pages/Terms&Conditions";
+import MembershipPage from "./pages/Membershippage";
 // Admin
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboards";
@@ -79,6 +80,12 @@ function App() {
                       />
                     }
                   />
+    
+   <Route
+                    path="/membership"
+                    element={<MembershipPage />}
+                  />
+
 
                   <Route
                     path="/women"

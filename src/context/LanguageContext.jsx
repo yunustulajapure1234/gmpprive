@@ -20,6 +20,7 @@ export const translations = {
       contact: "Contact Us",
       packages: "Packages",
       services: "Services",
+      membership: "Membership",
     },
     banner: {
       items: [
@@ -212,6 +213,7 @@ export const translations = {
       contact: "اتصل بنا",
       packages: "الباقات",
       services: "الخدمات",
+      membership: "العضوية",
     },
     banner: {
       items: [

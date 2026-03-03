@@ -1,120 +1,156 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useLanguage } from "../context/LanguageContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import logo from "../assets/GMP-Prive-Beauty-and-fitness (2) (1).png";
+import "./Footer.css";
 
 const Footer = () => {
-  const { t } = useLanguage();
+  const { t }     = useLanguage();
+  const navigate  = useNavigate();
+  const location  = useLocation();
+  const footerRef = useRef(null);
+
+  /* ── Same routing logic as Navbar ── */
+  const goToSection = (sectionId) => {
+    if (location.pathname !== "/") {
+      navigate("/", { state: { scrollTo: sectionId } });
+    } else {
+      const el = document.getElementById(sectionId);
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  /* ── Scroll-in animation ── */
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          footerRef.current?.classList.add("footer-visible");
+        }
+      },
+      { threshold: 0.1 }
+    );
+    if (footerRef.current) observer.observe(footerRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  const quickLinks = [
+    { label: t.footer?.links?.home     || "Home",     action: () => navigate("/")           },
+    { label: t.footer?.links?.services || "Services", action: () => goToSection("services") },
+    { label: t.footer?.links?.packages || "Packages", action: () => goToSection("packages") },
+    { label: t.footer?.links?.about    || "About",    action: () => goToSection("about")    },
+    { label: t.footer?.links?.faqs     || "Policy",   action: () => goToSection("policy")   },
+  ];
 
   return (
-    <footer
-      className="bg-gradient-to-br from-black via-gray-900 to-black text-white pt-20 pb-10"
-      id="contact"
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <footer ref={footerRef} className="footer-root" id="contact">
 
-        {/* MAIN GRID */}
-        <div className="grid md:grid-cols-3 gap-14 mb-14">
+      {/* Gold top border */}
+      <div className="footer-top-line" />
+
+      {/* Ambient orbs */}
+      <div className="footer-orb footer-orb-1" />
+      <div className="footer-orb footer-orb-2" />
+
+      <div className="footer-inner">
+
+        {/* ── Grid: Brand / Links / Contact ── */}
+        <div className="footer-grid">
 
           {/* BRAND */}
-          <div>
-            <div className="mb-6">
-              <img
-  src={logo}
-  alt="GMP Prive"
-  className="h-16 w-auto mb-4"
-/>
+          <div className="footer-brand footer-col">
+            <button onClick={() => navigate("/")} className="footer-logo-btn">
+              <img src={logo} alt="GMP Privé" className="footer-logo" />
+            </button>
 
-              <p className="text-sm text-gray-400 mt-1">
-                {t.footer.brandTag}
-              </p>
-            </div>
-
-            <p className="text-gray-400 leading-relaxed mb-6">
-              {t.footer.description}
+            <p className="footer-tagline">
+              {t.footer?.brandTag || "Luxury Home Salon • Dubai"}
             </p>
+
+            <p className="footer-desc">
+              {t.footer?.description || "Premium beauty & wellness services delivered to your home across Dubai."}
+            </p>
+
           </div>
 
           {/* QUICK LINKS */}
-          <div>
-            <h4 className="text-lg font-semibold mb-6 text-amber-400">
-              {t.footer.quickLinks}
+          <div className="footer-col">
+            <h4 className="footer-col-title">
+              <span className="footer-title-line" />
+              {t.footer?.quickLinks || "Quick Links"}
             </h4>
 
-            <ul className="space-y-3 text-gray-400">
+            <ul className="footer-links-list">
+              {quickLinks.map((link, i) => (
+                <li key={i}>
+                  <button onClick={link.action} className="footer-link">
+                    <span className="footer-link-arrow">›</span>
+                    {link.label}
+                  </button>
+                </li>
+              ))}
               <li>
-                <a href="/" className="hover:text-amber-400 transition-all duration-300">
-                  {t.footer.links.home}
-                </a>
-              </li>
-              <li>
-                <a href="#services" className="hover:text-amber-400 transition-all duration-300">
-                  {t.footer.links.services}
-                </a>
-              </li>
-              <li>
-                <a href="#packages" className="hover:text-amber-400 transition-all duration-300">
-                  {t.footer.links.packages}
-                </a>
-              </li>
-              <li>
-                <a href="#policy" className="hover:text-amber-400 transition-all duration-300">
-                  {t.footer.links.faqs}
-                </a>
-              </li>
-             <li>
-  <Link 
-    to="/terms" 
-    className="hover:text-amber-400 transition-all duration-300"
-  >
-    Terms & Conditions
-  </Link>
-</li>
-              
-              <li>
-                <a href="#about" className="hover:text-amber-400 transition-all duration-300">
-                  {t.footer.links.about}
-                </a>
+                <Link to="/terms" className="footer-link">
+                  <span className="footer-link-arrow">›</span>
+                  Terms & Conditions
+                </Link>
               </li>
             </ul>
           </div>
 
           {/* CONTACT */}
-          <div>
-            <h4 className="text-lg font-semibold mb-6 text-amber-400">
-              {t.footer.contact}
+          <div className="footer-col">
+            <h4 className="footer-col-title">
+              <span className="footer-title-line" />
+              {t.footer?.contact || "Contact Us"}
             </h4>
 
-            <ul className="space-y-4 text-gray-400">
-              <li>Al Barsha Heights, Dubai, UAE</li>
-
-              <li>
-                <a
-                  href="tel:+971528686112"
-                  className="hover:text-amber-400 transition-colors"
-                >
-                  +971 52 868 6112
-                </a>
+            <ul className="footer-contact-list">
+              <li className="footer-contact-item">
+                <span className="contact-icon">📍</span>
+                <span>Al Barsha Heights, Dubai, UAE</span>
               </li>
-
-              <li>
-                <a
-                  href="mailto:book@gmpprive.com"
-                  className="hover:text-amber-400 transition-colors break-all"
-                >
+              <li className="footer-contact-item">
+                <span className="contact-icon">📞</span>
+                <a href="tel:+971528686112" className="footer-link">+971 52 868 6112</a>
+              </li>
+              <li className="footer-contact-item">
+                <span className="contact-icon">✉️</span>
+                <a href="mailto:book@gmpprive.com" className="footer-link footer-email">
                   book@gmpprive.com
                 </a>
               </li>
             </ul>
+
+            {/* <button onClick={() => goToSection("services")} className="footer-cta">
+              Book Appointment
+              <span className="footer-cta-arrow">→</span>
+            </button> */}
           </div>
         </div>
 
-        {/* DIVIDER */}
-        <div className="border-t border-gray-800 pt-8 text-center">
-          <p className="text-gray-500 text-sm">
-            © 2026 GMP Prive Salon & Spa — {t.footer.rights}
+        {/* ── Ornament divider ── */}
+        <div className="footer-divider">
+          <div className="footer-divider-ornament">
+            <span className="ornament-dot" />
+            <span className="ornament-line" />
+            <span className="ornament-diamond">◆</span>
+            <span className="ornament-line" />
+            <span className="ornament-dot" />
+          </div>
+        </div>
+
+        {/* ── Bottom bar ── */}
+        <div className="footer-bottom">
+          <p className="footer-copy">
+            © 2026 <span className="footer-brand-name">GMP Prive</span> Beauty And Fitness
+            {" — "}{t.footer?.rights || "All rights reserved"}
+          </p>
+          <p className="footer-made">
+            Crafted with <span className="heart">♥</span> in Dubai
           </p>
         </div>
+
       </div>
     </footer>
   );

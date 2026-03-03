@@ -5,16 +5,13 @@ const BASE_URL =
 
 const api = axios.create({
   baseURL: `${BASE_URL}/api`,
+  withCredentials: true,
 });
 
-/* =========================================================
-   REQUEST INTERCEPTOR
-   🔥 ADMIN + INVENTORY TOKEN SUPPORT
-========================================================= */
+/* ================= REQUEST INTERCEPTOR ================= */
 
 api.interceptors.request.use(
   (config) => {
-    // First check inventory token
     const inventoryToken = localStorage.getItem("inventoryToken");
     const adminToken = localStorage.getItem("adminToken");
 
@@ -29,21 +26,15 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-/* =========================================================
-   RESPONSE INTERCEPTOR
-========================================================= */
+/* ================= RESPONSE INTERCEPTOR ================= */
 
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      console.warn("Unauthorized - Token expired or invalid");
-
-      // Optional auto logout logic
       localStorage.removeItem("inventoryToken");
       localStorage.removeItem("adminToken");
     }
-
     return Promise.reject(error);
   }
 );

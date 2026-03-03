@@ -13,6 +13,7 @@ import Contact from "../components/Contact";
 import ComboPackages from "../components/ComboPackages";
 import PolicyFAQ from "../components/PolicyFAQ";
 import ScrollOfferPopup from "../components/ScrollOfferPopup";
+import MembershipPreview from "../components/Membershippreview";
 
 const HomePage = ({ onBookNowClick }) => {
   const { language } = useLanguage();
@@ -48,6 +49,10 @@ const HomePage = ({ onBookNowClick }) => {
       {/* PACKAGES SECTION */}
       <div id="packages">
         <ComboPackages />
+      </div>
+       {/* PACKAGES SECTION */}
+      <div id="membership">
+        <MembershipPreview />
       </div>
 
       {/* CATEGORY SELECTION (SERVICES) */}

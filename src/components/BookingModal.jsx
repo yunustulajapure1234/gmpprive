@@ -181,7 +181,7 @@ const BookingModal = ({ onClose }) => {
 
   /* ================= WHATSAPP ================= */
   const handleWhatsAppBooking = (finalData, bookingNumber) => {
-    const phone = "917796413908";
+    const phone = "971528686112"; // Replace with your salon's WhatsApp number in international format without '+'
     const fullAddress = `Building: ${finalData.building}\nApartment/Villa: ${finalData.apartment}\nArea: ${finalData.area}`;
     const mapQuery = `${finalData.building}, ${finalData.apartment}, ${finalData.area}, UAE`;
     const mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}`;
